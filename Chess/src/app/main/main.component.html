@@ -4,8 +4,10 @@
             {{v_index}}
         </span>
     </div>
-    <table class="tiles-container">
-        
+    <table>
+        <tr *ngFor="let v of vertical_index">
+            <td ngClass="tiles" *ngFor="let h of horizontal_index"></td>
+        </tr>
     </table>
 
     <div class="index-horizontal">

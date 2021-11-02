@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Piece } from '../models/pieces';
 
 @Component({
   selector: 'app-main-component',
@@ -9,7 +10,7 @@ export class MainComponent implements OnInit {
    
   vertical_index: number[] = [];
   horizontal_index: String[] =[];
-
+  chessboard: Piece[][]=[];
   
   constructor() {
     for(let i=1;i<9;i++)
@@ -22,6 +23,9 @@ export class MainComponent implements OnInit {
     //obie sa w kolejnosci roznacej ale vert index wyswietlic odwrotnie
     //odwrocenie bo na odwrot trzeba wyswietlic dolny lewy a1 dla bialych na dole
   }
+
+
+
   ngOnInit(): void {
   }
 
