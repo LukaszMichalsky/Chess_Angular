@@ -1,22 +1,44 @@
+@import "../../styles";
 .chessboard{
+    width: 660px;
+    height: 660px;
     margin: auto;
     margin-left: 20%;
     margin-top: 20px;
     border-collapse: collapse;  
+    background: rgb(27, 27, 27);
     border: 3px solid rgb(27, 27, 27);
+    position: absolute;
 }
 
-.index{
+.index-vertical{  
+    color:rgb(255,248,220);
     background-color: rgb(27, 27, 27);
-    
-    :-vertical{
-        max-width: 20px;
-        height: 100%;
-    }
-
-    :-horizontal{
-        max-height: 20px;
-        width: 100%;
-    }
+    width: 20px;
+    height: 96%;
+    display: grid;
+    align-items: center;
+    justify-content: center;
 }
 
+.index-horizontal{
+    color: rgb(255,248,220);
+    background-color:rgb(27, 27, 27);
+    height: 20px;
+    width: 96%;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    display: flex;
+    justify-content: space-around;
+
+}
+
+.tiles-container{
+    width: 640px;
+    height: 640px;
+    background: green;
+    top:0;
+    right: 0;
+    position: absolute;
+}

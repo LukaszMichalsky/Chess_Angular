@@ -16,8 +16,11 @@ export class MainComponent implements OnInit {
     {
       this.horizontal_index[i-1]=String.fromCharCode(i+64);
       this.vertical_index[i-1]=i;
-    }//stworzenie i zainicjalizowanie 2 tablic dla indeksow bo latwiej niz wpisywac recznie tablice dla ngfor
+    }
+    this.vertical_index.reverse();
+    //stworzenie i zainicjalizowanie 2 tablic dla indeksow bo latwiej niz wpisywac recznie tablice dla ngfor
     //obie sa w kolejnosci roznacej ale vert index wyswietlic odwrotnie
+    //odwrocenie bo na odwrot trzeba wyswietlic dolny lewy a1 dla bialych na dole
   }
   ngOnInit(): void {
   }

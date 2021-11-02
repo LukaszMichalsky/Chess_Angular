@@ -1,10 +1,16 @@
 <div class="chessboard">
-    <div class="index-vertical" *ngFor>
-
+    <div class="index-vertical">
+        <span  *ngFor="let v_index of vertical_index">
+            {{v_index}}
+        </span>
     </div>
-
+    <table class="tiles-container">
+        
+    </table>
 
     <div class="index-horizontal">
-
+        <span  *ngFor="let h_index of horizontal_index">
+            {{h_index}}
+        </span>
     </div>
-</div>
+</div>  
