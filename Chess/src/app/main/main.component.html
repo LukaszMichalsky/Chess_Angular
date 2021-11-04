@@ -5,8 +5,11 @@
         </span>
     </div>
     <table>
-        <tr *ngFor="let v of vertical_index">
-            <td ngClass="tiles" *ngFor="let h of horizontal_index"></td>
+        <tr *ngFor="let row of chessboard;let i=index">
+            <td ngClass="tiles" *ngFor="let cell of row;let j=index">
+               <img *ngIf="chessboard[i][j]!=null" src="assets/{{chessboard[i][j].color}}-{{chessboard[i][j].type}}.png">
+
+            </td>
         </tr>
     </table>
 
@@ -15,4 +18,4 @@
             {{h_index}}
         </span>
     </div>
-</div>  
+</div>

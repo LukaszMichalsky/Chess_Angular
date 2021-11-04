@@ -1,21 +1,21 @@
-export interface Piece{
+export interface IPiece{
     type: PieceType;
     color: Color;
     row: number;
     column: number;
 }
 
-enum Color
+export enum Color
 {
-    Black,
-    White
+    Black = "Black",
+    White = "White"
 }
 
-enum PieceType{
-    King,
-    Queen,
-    Rook,
-    Knight,
-    Bishop,
-    Pawn
+export enum PieceType{
+    King = 'King',
+    Queen = 'Queen',
+    Rook = 'Rook',
+    Knight = 'Knight',
+    Bishop = 'Bishop',
+    Pawn = 'Pawn'
 }
