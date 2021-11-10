@@ -1,8 +1,9 @@
 export interface IPiece{
-    type: PieceType;
-    color: Color;
+    type?: PieceType;
+    color?: Color;
     row: number;
     column: number;
+    validCell?: boolean;
 }
 
 export enum Color

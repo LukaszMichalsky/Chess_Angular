@@ -5,13 +5,13 @@
     margin: auto;
     margin-left: 20%;
     margin-top: 20px;
-    border-collapse: collapse;  
+    border-collapse: collapse;
     background: rgb(27, 27, 27);
     border: 3px solid rgb(27, 27, 27);
     position: absolute;
 }
 
-.index-vertical{  
+.index-vertical{
     color:rgb(255,248,220);
     background-color: rgb(27, 27, 27);
     width: 20px;
@@ -31,31 +31,29 @@
     position: absolute;
     display: flex;
     justify-content: space-around;
-    
+
 }
 
-table{
-    width: 640px;
-    height: 640px;
-    top:0;
-    right: 0;
-    position: absolute;
-    border-collapse: collapse;  
-    background: $primary-color-white;
+.board{
+  width: 640px;
+  height: 640px;
+  top:0;
+  right: 0;
+  position: absolute;
+  border-collapse: collapse;
+  display: grid;
+  grid-template-columns: repeat(8,1fr);
 }
 
-td{
-    width:12.5%;
-    height: 12.5%;
-    background-repeat: no-repeat;     
-    background-position: center;
-    text-align: center;
+.cell{
+  width:80px;
+  height: 80px;
+  background-repeat: no-repeat;
+  background-position: center;
+  text-align: center;
 }
 
-tr:nth-child(even)td:nth-child(odd){
-    background: $primary-color-black;
-}
-
-tr:nth-child(odd)td:nth-child(even){
-    background: $primary-color-black;
+img{
+  margin-top: 24px;
+  opacity: 0.8;
 }
