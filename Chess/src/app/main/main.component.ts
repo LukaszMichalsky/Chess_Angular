@@ -11,7 +11,12 @@ export class MainComponent implements OnInit {
   horizontal_index: String[] =[];
   chessboard: IPiece[][];
   validCell: boolean=false;
-
+  PlayerTurn = Color.White;//true if white player turn / false if black player turn
+  previousClick: IPiece={
+    row: -1,
+    column: -1,
+    validCell: false
+  };
   constructor() {
 
     this.chessboard = [];
@@ -22,7 +27,8 @@ export class MainComponent implements OnInit {
       {
         this.chessboard[i][j]= {
           "row":i,
-          "column":j
+          "column":j,
+          "validCell":false
         };
       }
     }
@@ -86,9 +92,10 @@ export class MainComponent implements OnInit {
 
   }
 
-  validMoves(tab: any )
+  validMoves(tab: IPiece )
   {
-    if(tab!=null)
+
+    this.clearValidMoves();//clear whole validmoves when pick other gif !!!add color to comper to change choose movepick to the same color not to kill enemy piece
     switch(tab.type)
     {
       case "Pawn":{
@@ -96,21 +103,51 @@ export class MainComponent implements OnInit {
       }
       break;
       case "Rook":{
-        for(let i=0;i<8;i++)
+        for(let i=tab.row-1;i>=0;i--)//from piece to up
         {
-          if(tab.row==i)
-          {
-
-          }
+          if(this.setValidCell(i,tab.column,tab.color))
+            break;
+        }
+        for(let i=tab.row+1;i<8;i++)//from piece to down
+        {
+          if(this.setValidCell(i,tab.column,tab.color))
+            break;
+        }
+        for(let i=tab.column-1;i>=0;i--)//from piece to left
+        {
+          if(this.setValidCell(tab.row,i,tab.color))
+            break;
+        }
+        for(let i=tab.column+1;i<8;i++)//from piece to to right
+        {
+          if(this.setValidCell(tab.row,i,tab.color))
+            break;
         }
       }
       break;
       case "Knight":{
-
+        let j:number;
+        for(let i=-2;i<=2;i++)
+        {
+          if(i==0) continue;
+          if(i%2==0) j=-1;
+          else j=-2;
+          for(let k=0;k<2;k++)
+          {
+            if(tab.row+i>0 && tab.row+i<8 && tab.column+i>0 && tab.column+i<8 )//is in array range
+            {
+              this.setValidCell(tab.row+i,tab.column+j,tab.color);
+            }
+            j=j*-1;
+          }
+        }
       }
       break;
       case "Bishop":{
+        // for()//diagonal up left
+        // {
 
+        // }
       }
       break;
       case "Queen":{
@@ -118,12 +155,71 @@ export class MainComponent implements OnInit {
       }
       break;
       case "King":{
-
+        for(let i=-1;i<2;i++)
+        {
+          for(let j=-1;j<2;j++)
+          {
+            if(tab.row+i>0 && tab.row+i<8 && tab.column+i>0 && tab.column+i<8 )//is in array range
+            {
+              this.setValidCell(tab.row+i,tab.column+j,tab.color);
+            }
+          }
+        }
       }
       break;
     }
+    this.chessboard[tab.row][tab.column].validCell=false;
   }
 
+  play(tab: IPiece)
+  {
+    if(tab.color==this.PlayerTurn||tab.validCell==true)
+    {
+      if(tab.validCell==false)//if it first click check validmmoves
+      {
+        this.validMoves(tab);
+        this.previousClick=tab;
+      }
+      else
+      {
+        tab.color=this.previousClick.color;
+        tab.type=this.previousClick.type;
+        this.previousClick.color=undefined;
+        this.previousClick.type=undefined;
+        this.clearValidMoves();
+        this.changePlayerTurn();
+      }
+
+    }
+  }
+
+  clearValidMoves(){
+    for(let row of this.chessboard)
+      for(let cell of row)
+          cell.validCell=false;
+  }
+  setValidCell(row: number,col: number,color: any)
+  {
+    let val = this.chessboard[row][col].color;
+    if(val == undefined)
+    {
+      this.chessboard[row][col].validCell=true;//without piece set validcell
+      return false;
+    }
+    else if(val != color)
+    {
+      this.chessboard[row][col].validCell=true;
+      return true;
+    }
+    return true;//-> if(fnc) braeak
+  }
+  changePlayerTurn()
+  {
+    if(this.PlayerTurn==Color.White)
+      this.PlayerTurn=Color.Black;
+    else
+      this.PlayerTurn=Color.White;
+  }
 }
 
 

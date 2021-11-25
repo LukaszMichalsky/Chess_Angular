@@ -4,17 +4,10 @@
             {{v_index}}
         </span>
     </div>
-    <!-- <table>
-        <tr *ngFor="let row of chessboard;let i=index">
-            <td *ngFor="let cell of row;let j=index" (click)="validMoves(chessboard[i][j])">
-                 <img *ngIf="chessboard[i][j]!=null" src="assets/{{chessboard[i][j].color}}-{{chessboard[i][j].type}}.png" >
-            </td>
-        </tr>
-    </table> -->
     <div class="board">
         <ng-container *ngFor="let row of chessboard;let i=index">
-          <ng-container *ngFor="let cell of row;let j=index" (click)="validMoves(chessboard[i][j])" >
-            <div class="cell"
+          <ng-container *ngFor="let cell of row;let j=index">
+            <div class="cell" (click)="play(chessboard[i][j])"
             [ngStyle]="{'background-color': (i+j)%2 ? 'rgb(47,79,79)' : 'rgb(255,235,205)'}"
             style="background-image: url(assets/{{chessboard[i][j].color}}-{{chessboard[i][j].type}}.png)">
               <img *ngIf="chessboard[i][j].validCell==true" src="assets/Valid-Cell.png" />

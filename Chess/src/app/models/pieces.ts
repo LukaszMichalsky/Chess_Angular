@@ -3,7 +3,7 @@ export interface IPiece{
     color?: Color;
     row: number;
     column: number;
-    validCell?: boolean;
+    validCell: boolean;
 }
 
 export enum Color
