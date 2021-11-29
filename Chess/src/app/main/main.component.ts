@@ -51,38 +51,38 @@ export class MainComponent implements OnInit {
 
   setPieces()//pierwsze ustawienie figur
   {
-    for(let i=0;i<8;i++)//pawns
-    {
-      this.chessboard[1][i] = {
-        "type": PieceType.Pawn,
-        "color": Color.Black,
-        "row": 1,
-        "column": i,
-        "validCell": false
-      };
-      this.chessboard[6][i] = {
-        "type": PieceType.Pawn,
-        "color": Color.White,
-        "row": 6,
-        "column": i,
-        "validCell": false
-      }
-    }
+    // for(let i=0;i<8;i++)//pawns
+    // {
+    //   this.chessboard[1][i] = {
+    //     "type": PieceType.Pawn,
+    //     "color": Color.Black,
+    //     "row": 1,
+    //     "column": i,
+    //     "validCell": false
+    //   };
+    //   this.chessboard[6][i] = {
+    //     "type": PieceType.Pawn,
+    //     "color": Color.White,
+    //     "row": 6,
+    //     "column": i,
+    //     "validCell": false
+    //   }
+    // }
     //ROOKS
     this.chessboard[0][0]={"type": PieceType.Rook,"color": Color.Black,"row": 0,"column":0,"validCell": false};
     this.chessboard[0][7]={"type": PieceType.Rook,"color": Color.Black,"row": 0,"column":7,"validCell": false};
     this.chessboard[7][0]={"type": PieceType.Rook,"color": Color.White,"row": 7,"column":0,"validCell": false};
     this.chessboard[7][7]={"type": PieceType.Rook,"color": Color.White,"row": 7,"column":7,"validCell": false};
-    //BISHOPS
-    this.chessboard[0][1]={"type": PieceType.Bishop,"color": Color.Black,"row": 0,"column":1,"validCell": false};
-    this.chessboard[0][6]={"type": PieceType.Bishop,"color": Color.Black,"row": 0,"column":6,"validCell": false};
-    this.chessboard[7][1]={"type": PieceType.Bishop,"color": Color.White,"row": 7,"column":1,"validCell": false};
-    this.chessboard[7][6]={"type": PieceType.Bishop,"color": Color.White,"row": 7,"column":6,"validCell": false};
     //KNIGHTS
-    this.chessboard[0][2]={"type": PieceType.Knight,"color": Color.Black,"row": 0,"column":2,"validCell": false};
-    this.chessboard[0][5]={"type": PieceType.Knight,"color": Color.Black,"row": 0,"column":5,"validCell": false};
-    this.chessboard[7][2]={"type": PieceType.Knight,"color": Color.White,"row": 7,"column":2,"validCell": false};
-    this.chessboard[7][5]={"type": PieceType.Knight,"color": Color.White,"row": 7,"column":5,"validCell": false};
+    this.chessboard[0][1]={"type": PieceType.Knight,"color": Color.Black,"row": 0,"column":1,"validCell": false};
+    this.chessboard[0][6]={"type": PieceType.Knight,"color": Color.Black,"row": 0,"column":6,"validCell": false};
+    this.chessboard[7][1]={"type": PieceType.Knight,"color": Color.White,"row": 7,"column":1,"validCell": false};
+    this.chessboard[7][6]={"type": PieceType.Knight,"color": Color.White,"row": 7,"column":6,"validCell": false};
+    //BISHOPS
+    this.chessboard[0][2]={"type": PieceType.Bishop,"color": Color.Black,"row": 0,"column":2,"validCell": false};
+    this.chessboard[0][5]={"type": PieceType.Bishop,"color": Color.Black,"row": 0,"column":5,"validCell": false};
+    this.chessboard[7][2]={"type": PieceType.Bishop,"color": Color.White,"row": 7,"column":2,"validCell": false};
+    this.chessboard[7][5]={"type": PieceType.Bishop,"color": Color.White,"row": 7,"column":5,"validCell": false};
     //QUEENS
     this.chessboard[0][4]={"type": PieceType.Queen,"color": Color.Black,"row": 0,"column":4,"validCell": false};
     this.chessboard[7][3]={"type": PieceType.Queen,"color": Color.White,"row": 7,"column":3,"validCell": false};
@@ -134,7 +134,7 @@ export class MainComponent implements OnInit {
           else j=-2;
           for(let k=0;k<2;k++)
           {
-            if(tab.row+i>0 && tab.row+i<8 && tab.column+i>0 && tab.column+i<8 )//is in array range
+            if(tab.row+i>=0 && tab.row+i<8 && tab.column+j>=0 && tab.column+j<8 )//is in array range
             {
               this.setValidCell(tab.row+i,tab.column+j,tab.color);
             }
@@ -144,11 +144,13 @@ export class MainComponent implements OnInit {
       }
       break;
       case "Bishop":{
-        // for()//diagonal up left
-        // {
-
-        // }
-      }
+        for(let i=)//diagonal up left
+        {
+          if(tab.row+i>0 && tab.row+i<8 && tab.column+i>0 && tab.column+i<8 )//is in array range
+          {
+            this.setValidCell(tab.row+i,tab.column+j,tab.color);
+          }
+        }
       break;
       case "Queen":{
 
@@ -190,6 +192,9 @@ export class MainComponent implements OnInit {
         this.changePlayerTurn();
       }
 
+    }else
+    {
+      this.clearValidMoves();
     }
   }
 
