@@ -51,23 +51,23 @@ export class MainComponent implements OnInit {
 
   setPieces()//pierwsze ustawienie figur
   {
-    // for(let i=0;i<8;i++)//pawns
-    // {
-    //   this.chessboard[1][i] = {
-    //     "type": PieceType.Pawn,
-    //     "color": Color.Black,
-    //     "row": 1,
-    //     "column": i,
-    //     "validCell": false
-    //   };
-    //   this.chessboard[6][i] = {
-    //     "type": PieceType.Pawn,
-    //     "color": Color.White,
-    //     "row": 6,
-    //     "column": i,
-    //     "validCell": false
-    //   }
-    // }
+    for(let i=0;i<8;i++)//pawns
+    {
+      this.chessboard[1][i] = {
+        "type": PieceType.Pawn,
+        "color": Color.Black,
+        "row": 1,
+        "column": i,
+        "validCell": false
+      };
+      this.chessboard[6][i] = {
+        "type": PieceType.Pawn,
+        "color": Color.White,
+        "row": 6,
+        "column": i,
+        "validCell": false
+      }
+    }
     //ROOKS
     this.chessboard[0][0]={"type": PieceType.Rook,"color": Color.Black,"row": 0,"column":0,"validCell": false};
     this.chessboard[0][7]={"type": PieceType.Rook,"color": Color.Black,"row": 0,"column":7,"validCell": false};
@@ -144,13 +144,28 @@ export class MainComponent implements OnInit {
       }
       break;
       case "Bishop":{
-        for(let i=)//diagonal up left
+        for(let i=1;i<8;i++)//diagonal up left
         {
-          if(tab.row+i>0 && tab.row+i<8 && tab.column+i>0 && tab.column+i<8 )//is in array range
-          {
-            this.setValidCell(tab.row+i,tab.column+j,tab.color);
-          }
+          if(tab.row-i<0 || tab.column-i<0 || this.setValidCell(tab.row-i,tab.column-i,tab.color))
+            break;
         }
+        for(let i=1;i<8;i++)//diagonal up right
+        {
+          if(tab.row-i<0 || tab.column+i>7 || this.setValidCell(tab.row-i,tab.column+i,tab.color))
+            break;
+        }
+        for(let i=1;i<8;i++)//diagonal down right
+        {
+          if(tab.row+i>7 || tab.column+i>7 || this.setValidCell(tab.row+i,tab.column+i,tab.color))
+            break;
+        }
+        for(let i=1;i<8;i++)//diagonal down left
+        {
+          if(tab.row+i>7 || tab.column-i<0 || this.setValidCell(tab.row+i,tab.column-i,tab.color))
+            break;
+        }
+
+      }
       break;
       case "Queen":{
 
