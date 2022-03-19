@@ -18,9 +18,10 @@ export class MainComponent implements OnInit {
     column: -1,
     validCell: false
   };
-
+  localChessboard: any
+  ;
   constructor(private appLogicService: AppLogicService) {
-
+      
     // this.chessboard = [];
     // for(let i=0;i<8;i++)
     // {
@@ -45,12 +46,14 @@ export class MainComponent implements OnInit {
       this.vertical_index[i-1]=i;
     }
     this.vertical_index.reverse();
+    this.localChessboard = this.appLogicService.chessboard$.subscribe();
     //stworzenie i zainicjalizowanie 2 tablic dla indeksow bo latwiej niz wpisywac recznie tablice dla ngfor
     //obie sa w kolejnosci roznacej ale vert index wyswietlic odwrotnie
     //odwrocenie bo na odwrot trzeba wyswietlic dolny lewy a1 dla bialych na dole
     // this.appLogicService.setPieces();
   }
 
+  
   // setPieces()//pierwsze ustawienie figur
   // {
   //   for(let i=0;i<8;i++)//pawns
@@ -94,66 +97,66 @@ export class MainComponent implements OnInit {
 
   // }
 
-  validMoves(tab: IPiece )
-  {
+  // validMoves(tab: IPiece )
+  // {
 
-    this.appLogicService.clearValidMoves();//clear whole validmoves when pick other gif !!!add color to comper to change choose movepick to the same color not to kill enemy piece
-    switch(tab.type)
-    {
-      case "Pawn":{
-        this.appLogicService.PawnMovesSet(tab);
-      }
-      break;
-      case "Rook":{
-        this.appLogicService.RookMoveSet(tab);
-      }
-      break;
-      case "Knight":{
-        this.appLogicService.KnightMoveSet(tab);
-      }
-      break;
-      case "Bishop":{
-        this.appLogicService.BishopMoveSet(tab);
-      }
-      break;
-      case "Queen":{
-        this.appLogicService.BishopMoveSet(tab);
-        this.appLogicService.RookMoveSet(tab);
-      }
-      break;
-      case "King":{
-       this.appLogicService.KingMoveSet(tab);
-      }
-      break;
-    }
-    this.appLogicService.chessboard[tab.row][tab.column].validCell=false;
+  //   this.appLogicService.clearValidMoves();//clear whole validmoves when pick other gif !!!add color to comper to change choose movepick to the same color not to kill enemy piece
+  //   switch(tab.type)
+  //   {
+  //     case "Pawn":{
+  //       this.appLogicService.PawnMovesSet(tab);
+  //     }
+  //     break;
+  //     case "Rook":{
+  //       this.appLogicService.RookMoveSet(tab);
+  //     }
+  //     break;
+  //     case "Knight":{
+  //       this.appLogicService.KnightMoveSet(tab);
+  //     }
+  //     break;
+  //     case "Bishop":{
+  //       this.appLogicService.BishopMoveSet(tab);
+  //     }
+  //     break;
+  //     case "Queen":{
+  //       this.appLogicService.BishopMoveSet(tab);
+  //       this.appLogicService.RookMoveSet(tab);
+  //     }
+  //     break;
+  //     case "King":{
+  //      this.appLogicService.KingMoveSet(tab);
+  //     }
+  //     break;
+  //   }
+  //   this.appLogicService.chessboard[tab.row][tab.column].validCell=false;
 
-  }
+  // }
 
-  play(tab: IPiece)
-  {
-    if(tab.color==this.appLogicService.PlayerTurn||tab.validCell==true)
-    {
-      if(tab.validCell==false)//if it first click check validmmoves
-      {
-        this.validMoves(tab);
-        this.previousClick=tab;
-      }
-      else
-      {
-        tab.color=this.previousClick.color;
-        tab.type=this.previousClick.type;
-        this.previousClick.color=undefined;
-        this.previousClick.type=undefined;
-        this.appLogicService.clearValidMoves();
-        this.appLogicService.changePlayerTurn();
-      }
+  // play(tab: IPiece)
+  // {
+  //   if(tab.color==this.appLogicService.PlayerTurn||tab.validCell==true)
+  //   {
+  //     if(tab.validCell==false)//if it first click check validmmoves
+  //     {
+  //       this.validMoves(tab);
+  //       this.previousClick=tab;
+  //     }
+  //     else
+  //     {
+  //       tab.color=this.previousClick.color;
+  //       tab.type=this.previousClick.type;
+  //       this.previousClick.color=undefined;
+  //       this.previousClick.type=undefined;
+  //       this.appLogicService.clearValidMoves();
+  //       this.appLogicService.changePlayerTurn();
+  //     }
 
-    }else
-    {
-      this.appLogicService.clearValidMoves();
-    }
-  }
+  //   }else
+  //   {
+  //     this.appLogicService.clearValidMoves();
+  //   }
+  // }
 
   // clearValidMoves(){
   //   for(let row of this.chessboard)
@@ -183,5 +186,3 @@ export class MainComponent implements OnInit {
   //     this.PlayerTurn=Color.White;
   // }
 }
-
-
