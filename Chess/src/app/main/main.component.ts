@@ -116,8 +116,7 @@ export class MainComponent implements OnInit {
       }
       break;
       case "Queen":{
-        this.appLogicService.BishopMoveSet(tab);
-        this.appLogicService.RookMoveSet(tab);
+        this.appLogicService.QueenMoveSet(tab);
       }
       break;
       case "King":{
@@ -133,24 +132,26 @@ export class MainComponent implements OnInit {
   {
     if(tab.color==this.appLogicService.playerTurn || tab.validCell==true)
     {
-      if(tab.validCell==false)//if it first click check validmmoves
+      if(tab.validCell==false)//if it first click check validMoves
       {
         this.validMoves(tab);
         this.previousClick=tab;
       }
-      else
+      else//wykonanie ruchu
       {
+        if((tab.row == 0 && tab.type == PieceType.Pawn) ||  (tab.row == 7 && tab.type == PieceType.Pawn)) 
+          tab.type = PieceType.Queen;
         tab.color=this.previousClick.color;
         tab.type=this.previousClick.type;
         this.previousClick.color=undefined;
         this.previousClick.type=undefined;
         this.appLogicService.clearValidMoves();
-        this.appLogicService.changePlayerTurn();
+        this.appLogicService.changePlayerTurn();  
       }
 
     }else
     {
-      this.appLogicService.clearValidMoves();
+      this.appLogicService.clearValidMoves();//klik gdzies na tablice czysci wszsytkei validCells 
     }
   }
 

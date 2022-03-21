@@ -99,10 +99,17 @@ export class AppLogicService {
   }
   // ==============================Pieces moveset functions==========================
   PawnMovesSet(tab: IPiece): void{
-    let direction:number = tab.color==Color.White ? -1 : 1;
-    if(tab.row == 1 || tab.row == 6)
-    {
-
+    let direction:number = tab.color==Color.White ? -1 : 1;//1 for black -1 for white
+    if(tab.row == 1 && tab.color == Color.Black){//first move
+      this.setValidCell(2,tab.column,tab.color);
+      this.setValidCell(3,tab.column,tab.color);
+    }
+    if(tab.row == 6 && tab.color == Color.White){//first move
+      this.setValidCell(4,tab.column,tab.color);
+      this.setValidCell(5,tab.column,tab.color);
+    }
+    else{
+      this.setValidCell(tab.row+direction,tab.column,tab.color);
     }
   }
 
