@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { from, map, Observable } from 'rxjs';
 import { Color, IPiece, PieceType } from './models/pieces';
 
 @Injectable({
@@ -7,30 +6,23 @@ import { Color, IPiece, PieceType } from './models/pieces';
 })
 export class AppLogicService {
 
-  chessboard$ = from(this.chessboardTemplate());
+  public chessboard: IPiece[][];
+  public playerTurn = Color.White;//true if white player turn / false if black player turn
 
-  PlayerTurn = Color.White;//true if white player turn / false if black player turn
-
-  chessboardTemplate() : IPiece[][]
-  {
-    let chessboardTemplate: IPiece[][] = [];
+  constructor() {
+    this.chessboard = [];
     for(let i=0;i<8;i++)
     {
-      chessboardTemplate[i] = [];
+      this.chessboard[i] = [];
       for(let j=0;j<8;j++)
       {
-        chessboardTemplate[i][j]= {
+        this.chessboard[i][j]= {
           "row":i,
           "column":j,
           "validCell":false
         };
       }
     }
-    return chessboardTemplate;
-  }
-
-  constructor() {
-   
      this.setPieces();
    }
    //-----------------------FUNCTIONS------------------------
@@ -38,7 +30,7 @@ export class AppLogicService {
   {
     for(let i=0;i<8;i++)//pawns
     {
-      this.chessboard$[1][i] = {
+      this.chessboard[1][i] = {
         "type": PieceType.Pawn,
         "color": Color.Black,
         "row": 1,
@@ -75,14 +67,13 @@ export class AppLogicService {
      this.chessboard[0][3]={"type": PieceType.King,"color": Color.Black,"row": 0,"column":3,"validCell": false};
      this.chessboard[7][4]={"type": PieceType.King,"color": Color.White,"row": 7,"column":4,"validCell": false};
   }
+
   clearValidMoves(){
-    this.chessboard$.pipe(
-      map() =>
-    );
-    for(let row of this.chessboard$)
+    for(let row of this.chessboard)
       for(let cell of row)
           cell.validCell=false;
   }
+
   setValidCell(row: number,col: number,color: any)
   {
     let val = this.chessboard[row][col].color;
@@ -96,63 +87,64 @@ export class AppLogicService {
       this.chessboard[row][col].validCell=true;
       return true;
     }
-    return true;//-> if(fnc) braeak
+    return true;//-> if(fnc) break
   }
+
   changePlayerTurn()
   {
-    if(this.PlayerTurn==Color.White)
-      this.PlayerTurn=Color.Black;
+    if(this.playerTurn==Color.White)
+      this.playerTurn=Color.Black;
     else
-      this.PlayerTurn=Color.White;
+      this.playerTurn=Color.White;
   }
   // ==============================Pieces moveset functions==========================
-  PawnMovesSet(tab: IPiece){}
+  PawnMovesSet(tab: IPiece): void{
+    let direction:number = tab.color==Color.White ? -1 : 1;
+    if(tab.row == 1 || tab.row == 6)
+    {
 
-  RookMoveSet(tab: IPiece)
-  {
-    for(let i=tab.row-1;i>=0;i--)//from piece to up
-        {
-          if(this.setValidCell(i,tab.column,tab.color))
-            break;
-        }
-        for(let i=tab.row+1;i<8;i++)//from piece to down
-        {
-          if(this.setValidCell(i,tab.column,tab.color))
-            break;
-        }
-        for(let i=tab.column-1;i>=0;i--)//from piece to left
-        {
-          if(this.setValidCell(tab.row,i,tab.color))
-            break;
-        }
-        for(let i=tab.column+1;i<8;i++)//from piece to to right
-        {
-          if(this.setValidCell(tab.row,i,tab.color))
-            break;
-        }
+    }
   }
 
-  KnightMoveSet(tab: IPiece)
+  RookMoveSet(tab: IPiece): void
   {
+    for(let i=tab.row-1;i>=0;i--){//from piece to up
+      if(this.setValidCell(i,tab.column,tab.color))
+        break;
+      }
+      for(let i=tab.row+1;i<8;i++){//from piece to down
+        if(this.setValidCell(i,tab.column,tab.color))
+          break;
+      }
+      for(let i=tab.column-1;i>=0;i--){//from piece to left
+        if(this.setValidCell(tab.row,i,tab.color))
+          break;
+      }
+      for(let i=tab.column+1;i<8;i++){//from piece to to right
+        if(this.setValidCell(tab.row,i,tab.color))
+          break;
+      }
+  }
+
+  KnightMoveSet(tab: IPiece): void{
     let j:number;
-        for(let i=-2;i<=2;i++)
+    for(let i=-2;i<=2;i++)
+    {
+      if(i==0) continue;
+      if(i%2==0) j=-1;
+      else j=-2;
+      for(let k=0;k<2;k++)
+      {
+        if(tab.row+i>=0 && tab.row+i<8 && tab.column+j>=0 && tab.column+j<8 )//is in array range
         {
-          if(i==0) continue;
-          if(i%2==0) j=-1;
-          else j=-2;
-          for(let k=0;k<2;k++)
-          {
-            if(tab.row+i>=0 && tab.row+i<8 && tab.column+j>=0 && tab.column+j<8 )//is in array range
-            {
-              this.setValidCell(tab.row+i,tab.column+j,tab.color);
-            }
-            j=j*-1;
-          }
+          this.setValidCell(tab.row+i,tab.column+j,tab.color);
         }
+        j=j*-1;
+      }
+    }
   }
 
-  BishopMoveSet(tab:IPiece)
-  {
+  BishopMoveSet(tab:IPiece): void{
     for(let i=1;i<8;i++)//diagonal up left
     {
       if(tab.row-i<0 || tab.column-i<0 || this.setValidCell(tab.row-i,tab.column-i,tab.color))
@@ -175,8 +167,7 @@ export class AppLogicService {
     }
   }
 
-  KingMoveSet(tab: IPiece)
-  {
+  KingMoveSet(tab: IPiece): void{
     for(let i=-1;i<2;i++)
     {
       for(let j=-1;j<2;j++)
@@ -189,4 +180,8 @@ export class AppLogicService {
     }
   }
 
- }
+  QueenMoveSet(tab: IPiece): void{
+    this.RookMoveSet(tab);
+    this.BishopMoveSet(tab);
+  }
+}
