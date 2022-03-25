@@ -139,12 +139,12 @@ export class MainComponent implements OnInit {
       }
       else//wykonanie ruchu
       {
-        if((tab.row == 0 && tab.type == PieceType.Pawn) ||  (tab.row == 7 && tab.type == PieceType.Pawn)) 
-          tab.type = PieceType.Queen;
         tab.color=this.previousClick.color;
         tab.type=this.previousClick.type;
         this.previousClick.color=undefined;
         this.previousClick.type=undefined;
+        if((tab.row == 0 && tab.type == PieceType.Pawn) ||  (tab.row == 7 && tab.type == PieceType.Pawn)) 
+          tab.type = PieceType.Queen;
         this.appLogicService.clearValidMoves();
         this.appLogicService.changePlayerTurn();  
       }

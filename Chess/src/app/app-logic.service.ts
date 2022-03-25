@@ -103,14 +103,19 @@ export class AppLogicService {
     if(tab.row == 1 && tab.color == Color.Black){//first move
       this.setValidCell(2,tab.column,tab.color);
       this.setValidCell(3,tab.column,tab.color);
+      return;
     }
     if(tab.row == 6 && tab.color == Color.White){//first move
       this.setValidCell(4,tab.column,tab.color);
       this.setValidCell(5,tab.column,tab.color);
+      return;
     }
-    else{
-      this.setValidCell(tab.row+direction,tab.column,tab.color);
-    }
+      let reverseColor = tab.color === Color.White ? Color.Black : Color.White;
+      //this.setValidCell(tab.row+direction,tab.column+1,tab.color);
+      //this.setValidCell(tab.row+direction,tab.column-1,tab.color);
+      if(this.chessboard[tab.row+direction][tab.column].color == undefined)
+        this.setValidCell(tab.row+direction,tab.column,tab.color);
+
   }
 
   RookMoveSet(tab: IPiece): void
