@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Color, IPiece, PieceType } from './models/pieces';
+import { Color, IPiece, PieceType } from '../models/pieces';
+
 
 @Injectable({
   providedIn: 'root'
 })
-export class AppLogicService {
+export class LogicService {
 
   public chessboard: IPiece[][];
   public playerTurn = Color.White;//true if white player turn / false if black player turn

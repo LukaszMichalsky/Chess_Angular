@@ -1,13 +1,14 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { AppLogicService } from '../app-logic.service';
+
 import { IPiece,Color,PieceType } from '../models/pieces';
+import { LogicService } from '../service/logic.service';
 
 @Component({
-  selector: 'app-main-component',
-  templateUrl: './main.component.html',
-  styleUrls: ['./main.component.scss']
+  selector: 'game-component',
+  templateUrl: './game.component.html',
+  styleUrls: ['./game.component.scss']
 })
-export class MainComponent implements OnInit {
+export class GameComponent implements OnInit {
   vertical_index: number[] = [];
   horizontal_index: String[] =[];
   validCell: boolean=false
@@ -18,8 +19,8 @@ export class MainComponent implements OnInit {
     validCell: false
   };
 
-  constructor(private appLogicService: AppLogicService) {
-     this.chessboard = appLogicService.chessboard; 
+  constructor(private logicService: LogicService) {
+     this.chessboard = logicService.chessboard; 
     // this.chessboard = [];
     // for(let i=0;i<8;i++)
     // {
@@ -96,41 +97,41 @@ export class MainComponent implements OnInit {
 
   validMoves(tab: IPiece )
   {
-    this.appLogicService.clearValidMoves();//clear whole validmoves when pick other gif !!!add color to comper to change choose movepick to the same color not to kill enemy piece
+    this.logicService.clearValidMoves();//clear whole validmoves when pick other gif !!!add color to comper to change choose movepick to the same color not to kill enemy piece
     switch(tab.type)
     {
       case "Pawn":{
-        this.appLogicService.PawnMovesSet(tab);
+        this.logicService.PawnMovesSet(tab);
       }
       break;
       case "Rook":{
-        this.appLogicService.RookMoveSet(tab);
+        this.logicService.RookMoveSet(tab);
       }
       break;
       case "Knight":{
-        this.appLogicService.KnightMoveSet(tab);
+        this.logicService.KnightMoveSet(tab);
       }
       break;
       case "Bishop":{
-        this.appLogicService.BishopMoveSet(tab);
+        this.logicService.BishopMoveSet(tab);
       }
       break;
       case "Queen":{
-        this.appLogicService.QueenMoveSet(tab);
+        this.logicService.QueenMoveSet(tab);
       }
       break;
       case "King":{
-       this.appLogicService.KingMoveSet(tab);
+       this.logicService.KingMoveSet(tab);
       }
       break;
     }
-    this.appLogicService.chessboard[tab.row][tab.column].validCell=false;
+    this.logicService.chessboard[tab.row][tab.column].validCell=false;
 
   }
 
   play(tab: IPiece)
   {
-    if(tab.color==this.appLogicService.playerTurn || tab.validCell==true)
+    if(tab.color==this.logicService.playerTurn || tab.validCell==true)
     {
       if(tab.validCell==false)//if it first click check validMoves
       {
@@ -145,13 +146,13 @@ export class MainComponent implements OnInit {
         this.previousClick.type=undefined;
         if((tab.row == 0 && tab.type == PieceType.Pawn) ||  (tab.row == 7 && tab.type == PieceType.Pawn)) 
           tab.type = PieceType.Queen;
-        this.appLogicService.clearValidMoves();
-        this.appLogicService.changePlayerTurn();  
+        this.logicService.clearValidMoves();
+        this.logicService.changePlayerTurn();  
       }
 
     }else
     {
-      this.appLogicService.clearValidMoves();//klik gdzies na tablice czysci wszsytkei validCells 
+      this.logicService.clearValidMoves();//klik gdzies na tablice czysci wszsytkei validCells 
     }
   }
 
