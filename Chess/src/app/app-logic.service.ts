@@ -68,14 +68,13 @@ export class AppLogicService {
      this.chessboard[7][4]={"type": PieceType.King,"color": Color.White,"row": 7,"column":4,"validCell": false};
   }
 
-  clearValidMoves(){
+  clearValidMoves(): void{
     for(let row of this.chessboard)
       for(let cell of row)
           cell.validCell=false;
   }
 
-  setValidCell(row: number,col: number,color: any)
-  {
+  setValidCell(row: number,col: number,color: Color | undefined): boolean{
     let val = this.chessboard[row][col].color;
     if(val == undefined)
     {
@@ -90,8 +89,29 @@ export class AppLogicService {
     return true;//-> if(fnc) break
   }
 
-  changePlayerTurn()
-  {
+  setPawnValid(row: number, col: number , color: Color | undefined): boolean{
+    let val = this.chessboard[row][col];
+    let side1 = this.chessboard[row][col+1];
+    let side2 = this.chessboard[row][col-1];
+    let reverseColor: Color = color === Color.White ? Color.Black : Color.White;
+    if(side1.color == reverseColor)
+    {
+      side1.validCell = true;
+    }
+    if(side2.color == reverseColor)
+    {
+      side2.validCell = true;
+    }
+    if(val.type != undefined)// is   any piece forward
+    {
+      val.validCell = false;
+      return false;
+    }
+    val.validCell = true;
+    return true;
+  }
+
+  changePlayerTurn(): void{
     if(this.playerTurn==Color.White)
       this.playerTurn=Color.Black;
     else
@@ -100,26 +120,16 @@ export class AppLogicService {
   // ==============================Pieces moveset functions==========================
   PawnMovesSet(tab: IPiece): void{
     let direction:number = tab.color==Color.White ? -1 : 1;//1 for black -1 for white
-    if(tab.row == 1 && tab.color == Color.Black){//first move
-      this.setValidCell(2,tab.column,tab.color);
-      this.setValidCell(3,tab.column,tab.color);
-      return;
+    this.setPawnValid(tab.row+direction,tab.column,tab.color);
+    if(tab.row == 1 && tab.color == Color.Black && this.chessboard[3][tab.column].type == undefined){//first move
+      this.chessboard[3][tab.column].validCell = true;
     }
-    if(tab.row == 6 && tab.color == Color.White){//first move
-      this.setValidCell(4,tab.column,tab.color);
-      this.setValidCell(5,tab.column,tab.color);
-      return;
+    if(tab.row == 6 && tab.color == Color.White && this.chessboard[4][tab.column].type == undefined ){//first move
+      this.chessboard[4][tab.column].validCell = true
     }
-      let reverseColor = tab.color === Color.White ? Color.Black : Color.White;
-      //this.setValidCell(tab.row+direction,tab.column+1,tab.color);
-      //this.setValidCell(tab.row+direction,tab.column-1,tab.color);
-      if(this.chessboard[tab.row+direction][tab.column].color == undefined)
-        this.setValidCell(tab.row+direction,tab.column,tab.color);
-
   }
 
-  RookMoveSet(tab: IPiece): void
-  {
+  RookMoveSet(tab: IPiece): void{
     for(let i=tab.row-1;i>=0;i--){//from piece to up
       if(this.setValidCell(i,tab.column,tab.color))
         break;
