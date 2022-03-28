@@ -1,1 +1,5 @@
-<game-component></game-component>
+<router-outlet></router-outlet>
+<button 
+    *ngIf="getRoute() !== '/'"
+    routerLink="" 
+>Back</button>
