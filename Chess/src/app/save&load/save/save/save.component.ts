@@ -10,19 +10,16 @@ import { LogicService} from '../../../service/logic.service'
 })
 export class SaveComponent implements OnInit {
 
-  data: IPiece[] = this.filterData();
-
   options ={
     fieldSeparator: ',',
-    quoteStrings: '"',
+    quoteStrings: '',
     decimalSeparator: '.',
     showLabels: true, 
-    showTitle: true,
+    showTitle: false,
     filename: 'Chess_game',
-    title: 'Chess save',
     useTextFile: false,
     useBom: true,
-    useKeysAsHeaders: true,
+    useKeysAsHeaders: false,
   }
 
   constructor(
@@ -34,22 +31,26 @@ export class SaveComponent implements OnInit {
 
   saveToFile(){
     const csvExporter = new ExportToCsv(this.options);
-    csvExporter.generateCsv(this.data);
+    csvExporter.generateCsv(this.filterData() );
   }
 
-  filterData(): IPiece[]{
+  filterData(): Array<any>{
     const data: IPiece[][] = this.logicService.chessboard;
-    let cleanData: any;
-    let counter =0;
+    let dataToSave: Array<any> =[];
+
     for(let i=0;i<8;i++){
       for(let j=0;j<8;j++){
-        if(data[i][j].type !== undefined){
-           cleanData[counter] = data[i][j];
-         
+        if(data[i][j].type != undefined){
+          let cleanData ={
+            row: data[i][j].row,
+            column: data[i][j].column,     
+            type: data[i][j].type,
+            color: data[i][j].color
+          }
+          dataToSave.push(cleanData);
         }
       }
     }
-    console.log(cleanData); 
-    return cleanData;
+    return dataToSave;
   }
 }
