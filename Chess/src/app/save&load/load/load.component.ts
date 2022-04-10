@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LogicService } from 'src/app/service/logic.service';
 
 @Component({
   selector: 'load-component',
@@ -7,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoadComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    logicService: LogicService
+  ) { }
 
   ngOnInit(): void {
   }
 
+
+  loadGame($event: any)
+  {
+    
+  }
 }
