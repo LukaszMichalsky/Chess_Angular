@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { LogicService } from 'src/app/service/logic.service';
 
 @Component({
@@ -9,7 +10,8 @@ import { LogicService } from 'src/app/service/logic.service';
 export class LoadComponent implements OnInit {
 
   constructor(
-    logicService: LogicService
+    private logicService: LogicService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -18,6 +20,8 @@ export class LoadComponent implements OnInit {
 
   loadGame($event: any)
   {
-    
+    this.logicService.isNewGame = false;
+    this.logicService.clearChessboard();
+    this.router.navigate(['/game']);
   }
 }

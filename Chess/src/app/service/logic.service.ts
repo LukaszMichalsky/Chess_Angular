@@ -1,15 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Color, IPiece, PieceType } from '../models/pieces';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class LogicService {
+export class LogicService implements OnInit{
 
   public chessboard: IPiece[][];
   public playerTurn = Color.White;//true if white player turn / false if black player turn
-
+  public isNewGame: boolean = true;
   constructor() {
     this.chessboard = [];
     for(let i=0;i<8;i++)
@@ -24,10 +24,17 @@ export class LogicService {
         };
       }
     }
-     this.setPieces();
+   }
+
+   ngOnInit()
+   {
+    if(this.isNewGame)
+    {
+      this.setNewGamePieces();
+    }
    }
    //-----------------------FUNCTIONS------------------------
-  setPieces()//pierwsze ustawienie figur
+  setNewGamePieces()//pierwsze ustawienie figur
   {
     for(let i=0;i<8;i++)//pawns
     {
@@ -67,6 +74,16 @@ export class LogicService {
      //KINGS
      this.chessboard[0][3]={"type": PieceType.King,"color": Color.Black,"row": 0,"column":3,"validCell": false};
      this.chessboard[7][4]={"type": PieceType.King,"color": Color.White,"row": 7,"column":4,"validCell": false};
+  }
+
+  clearChessboard(){
+    this.clearValidMoves()
+    for(let row of this.chessboard)
+      for(let cell of row){
+        cell.type = undefined;
+        cell.color = undefined; 
+      }
+      
   }
 
   clearValidMoves(): void{

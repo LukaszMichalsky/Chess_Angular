@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 
 import { IPiece,Color,PieceType } from '../models/pieces';
 import { LogicService } from '../service/logic.service';
@@ -8,7 +8,7 @@ import { LogicService } from '../service/logic.service';
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss']
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnInit,OnDestroy {
   vertical_index: number[] = [];
   horizontal_index: String[] =[];
   validCell: boolean=false
@@ -19,22 +19,11 @@ export class GameComponent implements OnInit {
     validCell: false
   };
 
-  constructor(private logicService: LogicService) {
-     this.chessboard = logicService.chessboard; 
-    // this.chessboard = [];
-    // for(let i=0;i<8;i++)
-    // {
-    //   this.chessboard[i] = [];
-    //   for(let j=0;j<8;j++)
-    //   {
-    //     this.chessboard[i][j]= {
-    //       "row":i,
-    //       "column":j,
-    //       "validCell":false
-    //     };
-    //   }
-    //}
-
+  constructor(private logicService: LogicService) 
+  {
+    if(this.logicService.isNewGame)
+      this.logicService.setNewGamePieces();
+    this.chessboard = logicService.chessboard; 
   }
 
   ngOnInit(): void {
@@ -50,50 +39,10 @@ export class GameComponent implements OnInit {
     //odwrocenie bo na odwrot trzeba wyswietlic dolny lewy a1 dla bialych na dole
     // this.appLogicService.setPieces();
   }
-
-  
-  // setPieces()//pierwsze ustawienie figur
-  // {
-  //   for(let i=0;i<8;i++)//pawns
-  //   {
-  //     this.chessboard[1][i] = {
-  //       "type": PieceType.Pawn,
-  //       "color": Color.Black,
-  //       "row": 1,
-  //       "column": i,
-  //       "validCell": false
-  //     };
-  //     this.chessboard[6][i] = {
-  //       "type": PieceType.Pawn,
-  //       "color": Color.White,
-  //       "row": 6,
-  //       "column": i,
-  //       "validCell": false
-  //     }
-  //   }
-  //   //ROOKS
-  //   this.chessboard[0][0]={"type": PieceType.Rook,"color": Color.Black,"row": 0,"column":0,"validCell": false};
-  //   this.chessboard[0][7]={"type": PieceType.Rook,"color": Color.Black,"row": 0,"column":7,"validCell": false};
-  //   this.chessboard[7][0]={"type": PieceType.Rook,"color": Color.White,"row": 7,"column":0,"validCell": false};
-  //   this.chessboard[7][7]={"type": PieceType.Rook,"color": Color.White,"row": 7,"column":7,"validCell": false};
-  //   //KNIGHTS
-  //   this.chessboard[0][1]={"type": PieceType.Knight,"color": Color.Black,"row": 0,"column":1,"validCell": false};
-  //   this.chessboard[0][6]={"type": PieceType.Knight,"color": Color.Black,"row": 0,"column":6,"validCell": false};
-  //   this.chessboard[7][1]={"type": PieceType.Knight,"color": Color.White,"row": 7,"column":1,"validCell": false};
-  //   this.chessboard[7][6]={"type": PieceType.Knight,"color": Color.White,"row": 7,"column":6,"validCell": false};
-  //   //BISHOPS
-  //   this.chessboard[0][2]={"type": PieceType.Bishop,"color": Color.Black,"row": 0,"column":2,"validCell": false};
-  //   this.chessboard[0][5]={"type": PieceType.Bishop,"color": Color.Black,"row": 0,"column":5,"validCell": false};
-  //   this.chessboard[7][2]={"type": PieceType.Bishop,"color": Color.White,"row": 7,"column":2,"validCell": false};
-  //   this.chessboard[7][5]={"type": PieceType.Bishop,"color": Color.White,"row": 7,"column":5,"validCell": false};
-  //   //QUEENS
-  //   this.chessboard[0][4]={"type": PieceType.Queen,"color": Color.Black,"row": 0,"column":4,"validCell": false};
-  //   this.chessboard[7][3]={"type": PieceType.Queen,"color": Color.White,"row": 7,"column":3,"validCell": false};
-  //   //KINGS
-  //   this.chessboard[0][3]={"type": PieceType.King,"color": Color.Black,"row": 0,"column":3,"validCell": false};
-  //   this.chessboard[7][4]={"type": PieceType.King,"color": Color.White,"row": 7,"column":4,"validCell": false};
-
-  // }
+  ngOnDestroy(): void {
+    this.logicService.isNewGame = true;
+    this.logicService.clearChessboard();
+  }
 
   validMoves(tab: IPiece )
   {
@@ -155,32 +104,4 @@ export class GameComponent implements OnInit {
       this.logicService.clearValidMoves();//klik gdzies na tablice czysci wszsytkei validCells 
     }
   }
-
-  // clearValidMoves(){
-  //   for(let row of this.chessboard)
-  //     for(let cell of row)
-  //         cell.validCell=false;
-  // }
-  // setValidCell(row: number,col: number,color: any)
-  // {
-  //   let val = this.chessboard[row][col].color;
-  //   if(val == undefined)
-  //   {
-  //     this.chessboard[row][col].validCell=true;//without piece set validcell
-  //     return false;
-  //   }
-  //   else if(val != color)
-  //   {
-  //     this.chessboard[row][col].validCell=true;
-  //     return true;
-  //   }
-  //   return true;//-> if(fnc) braeak
-  // }
-  // changePlayerTurn()
-  // {
-  //   if(this.PlayerTurn==Color.White)
-  //     this.PlayerTurn=Color.Black;
-  //   else
-  //     this.PlayerTurn=Color.White;
-  // }
 }
