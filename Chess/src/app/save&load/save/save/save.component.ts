@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ExportToCsv } from 'export-to-csv';
 import { IPiece } from 'src/app/models/pieces';
 import { LogicService} from '../../../service/logic.service'
@@ -22,7 +23,10 @@ export class SaveComponent implements OnInit {
     useKeysAsHeaders: false,
   }
 
+  fileUrl: any;
+
   constructor(
+    private sanitizer: DomSanitizer,
    private readonly logicService: LogicService
   ) { }
 
@@ -30,8 +34,9 @@ export class SaveComponent implements OnInit {
   }
 
   saveToFile(){
-    const csvExporter = new ExportToCsv(this.options);
-    csvExporter.generateCsv(this.filterData() );
+    let json = JSON.stringify(this.filterData());
+    let blob = new Blob([json],{type: "application/json"});
+    this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
   }
 
   filterData(): Array<any>{

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { LogicService } from 'src/app/service/logic.service';
-import { NgxCsvParser } from 'ngx-csv-parser';
+
 
 @Component({
   selector: 'load-component',
@@ -15,7 +15,7 @@ export class LoadComponent implements OnInit {
   constructor(
     private logicService: LogicService,
     private router: Router,
-    private ngxCsvParser: NgxCsvParser
+
   ) { }
 
   ngOnInit(): void {
@@ -27,18 +27,6 @@ export class LoadComponent implements OnInit {
   dataParser(event: any): void
   {
     const files = event.target.files;
-    this.ngxCsvParser.parse(files[0], { header: false, delimiter: ',' })
-    .pipe().subscribe({
-      next: (result): void => {
-        this.listOfPieces = result;
-        this.size= this.listOfPieces.length;
-        console.log(this.listOfPieces);
-        console.log(this.listOfPieces.length);
-      },
-      error: (error: any): void => {
-        console.log('Error', error);
-      }
-    });
 
   // result structure => [row, column, type, color]
     for(let i=0;i<this.size;i++)
