@@ -42,6 +42,7 @@ export class SaveComponent implements OnInit {
   filterData(): Array<any>{
     const data: IPiece[][] = this.logicService.chessboard;
     let dataToSave: Array<any> =[];
+    dataToSave.push({playerTurn: this.logicService.playerTurn});
 
     for(let i=0;i<8;i++){
       for(let j=0;j<8;j++){
@@ -56,6 +57,7 @@ export class SaveComponent implements OnInit {
         }
       }
     }
+
     return dataToSave;
   }
 }

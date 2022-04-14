@@ -10,37 +10,49 @@ import { LogicService } from 'src/app/service/logic.service';
 })
 export class LoadComponent implements OnInit {
 
+
   listOfPieces: any;
   size: number =0;
   constructor(
     private logicService: LogicService,
     private router: Router,
-
-  ) { }
+  ) { 
+  }
 
   ngOnInit(): void {
   }
+ 
 
-  @ViewChild('fileInput') fileInput: any;
-
-
-  dataParser(event: any): void
+  dataParser(data: any): void
   {
-    const files = event.target.files;
+    this.listOfPieces = JSON.parse(data);
+    this.logicService.playerTurn = this.listOfPieces[0].playerTurn;
+    this.listOfPieces.shift();
+    console.log(this.listOfPieces);
 
-  // result structure => [row, column, type, color]
-    for(let i=0;i<this.size;i++)
-    {
-      this.logicService.chessboard[this.listOfPieces[0]][this.listOfPieces[1]].type = this.listOfPieces[2]
-      this.logicService.chessboard[this.listOfPieces[0]][this.listOfPieces[1]].color = this.listOfPieces[3]
+    for(let piece of this.listOfPieces){
+      this.logicService.chessboard[piece.row][piece.column].type = piece.type;
+      this.logicService.chessboard[piece.row][piece.column].color = piece.color;
     }
+  // result structure => [row, column, type, color]
+  
   }
 
   loadGame($event: any)
   {
+    let file = $event.target.files[0];
+    const fileReader = new FileReader();
+    fileReader.readAsText(file);
+    fileReader.onload = () => {
+      this.dataParser(fileReader.result);
+    }
+    fileReader.onerror = (error) => {
+      console.log(error);
+    }
+
     this.logicService.isNewGame = false;
     this.logicService.clearChessboard();
-    this.dataParser($event);
+
     this.router.navigate(['/game']);
   }
 }
