@@ -9,8 +9,9 @@
           <ng-container *ngFor="let cell of row;let j=index">
             <div class="cell" (click)="play(chessboard[i][j])"
             [ngStyle]="{'background-color': (i+j)%2 ? 'rgb(47,79,79)' : 'rgb(255,235,205)'}"
-            style="background-image: url(assets/{{chessboard[i][j].color}}-{{chessboard[i][j].type}}.png)">
-              <img *ngIf="chessboard[i][j].validCell==true" src="assets/Valid-Cell.png" />
+            [ngClass]="{'validCellBackground' : chessboard[i][j].validCell==true}">
+              <img draggable="false" 
+              *ngIf="chessboard[i][j].type" src="assets/{{chessboard[i][j].color}}-{{chessboard[i][j].type}}.png"/>
             </div>
           </ng-container>
         </ng-container>
