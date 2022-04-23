@@ -6,7 +6,8 @@ import { Color, IPiece, PieceType } from '../models/pieces';
   providedIn: 'root'
 })
 export class LogicService implements OnInit{
-
+  public vertical_index: number[] = [];
+  public horizontal_index: String[] =[];
   public chessboard: IPiece[][];
   public playerTurn = Color.White;//true if white player turn / false if black player turn
   public isNewGame: boolean = true;
@@ -27,7 +28,7 @@ export class LogicService implements OnInit{
    }
 
    ngOnInit()
-   {
+   { 
     if(this.isNewGame)
     {
       this.setNewGamePieces();

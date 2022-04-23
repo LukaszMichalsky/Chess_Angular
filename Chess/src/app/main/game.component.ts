@@ -10,7 +10,7 @@ import { LogicService } from '../service/logic.service';
 })
 export class GameComponent implements OnInit,OnDestroy {
   vertical_index: number[] = [];
-  horizontal_index: String[] =[];
+  horizontal_index: String[] =[]; 
   validCell: boolean=false
   chessboard: IPiece[][];
   previousClick: IPiece={
@@ -20,25 +20,25 @@ export class GameComponent implements OnInit,OnDestroy {
   };
 
   constructor(private logicService: LogicService) 
-  {
+  {    
     if(this.logicService.isNewGame)
       this.logicService.setNewGamePieces();
     this.chessboard = logicService.chessboard; 
   }
 
-  ngOnInit(): void {
-
+  ngOnInit(): void {    
     for(let i=1;i<9;i++)
     {
       this.horizontal_index[i-1]=String.fromCharCode(i+64);
       this.vertical_index[i-1]=i;
+      console.log(this.horizontal_index)
     }
     this.vertical_index.reverse();
     //stworzenie i zainicjalizowanie 2 tablic dla indeksow bo latwiej niz wpisywac recznie tablice dla ngfor
     //obie sa w kolejnosci roznacej ale vert index wyswietlic odwrotnie
     //odwrocenie bo na odwrot trzeba wyswietlic dolny lewy a1 dla bialych na dole
-    // this.appLogicService.setPieces();
   }
+
   ngOnDestroy(): void {
     this.logicService.isNewGame = true;
     this.logicService.clearChessboard();

@@ -1,1 +1,30 @@
-<p>challenge works!</p>
+
+<div class="chessboard">
+    <div class="index-vertical">
+        <span  *ngFor="let v_index of vertical_index">
+            {{v_index}}
+        </span>
+    </div>
+    <div class="board">
+        <ng-container *ngFor="let row of chessboard;let i=index">
+          <ng-container *ngFor="let cell of row;let j=index">
+            <div class="cell"
+            [ngStyle]="{'background-color': (i+j)%2 ? 'rgb(47,79,79)' : 'rgb(255,235,205)'}"
+            [ngClass]="{'validCellBackground' : chessboard[i][j].validCell==true}">
+              <img draggable="false" 
+              *ngIf="chessboard[i][j].type" src="assets/{{chessboard[i][j].color}}-{{chessboard[i][j].type}}.png"/>
+            </div>
+          </ng-container>
+        </ng-container>
+    </div>
+    <div class="index-horizontal">
+        <span  *ngFor="let h_index of horizontal_index">
+            {{h_index}}
+        </span>
+    </div>
+</div> 
+
+  <div class="piecesPalet">
+    Pieces will be here
+  </div>
+<save-component></save-component>
