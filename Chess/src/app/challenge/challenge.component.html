@@ -9,10 +9,11 @@
         <ng-container *ngFor="let row of chessboard;let i=index">
           <ng-container *ngFor="let cell of row;let j=index">
             <div class="cell"
-            [ngStyle]="{'background-color': (i+j)%2 ? 'rgb(47,79,79)' : 'rgb(255,235,205)'}"
-            [ngClass]="{'validCellBackground' : chessboard[i][j].validCell==true}">
-              <img draggable="false" 
-              *ngIf="chessboard[i][j].type" src="assets/{{chessboard[i][j].color}}-{{chessboard[i][j].type}}.png"/>
+            [ngStyle]="{'background-color': (i+j)%2 ? '$board-color-black' : '$board-color-white'}">
+              <img
+                *ngIf="chessboard[i][j].type"
+                src="assets/{{chessboard[i][j].color}}-{{chessboard[i][j].type}}.png"
+                draggable="false">
             </div>
           </ng-container>
         </ng-container>
@@ -22,9 +23,13 @@
             {{h_index}}
         </span>
     </div>
-</div> 
+</div>
 
-  <div class="piecesPalet">
-    Pieces will be here
+  <div class="piecesPallet">
+    <div *ngFor="let piece of sidePiecesPallet">
+      <img
+      draggable="false"
+        src="assets/{{piece.color}}-{{piece.type}}.png"/>
+    </div>
   </div>
 <save-component></save-component>

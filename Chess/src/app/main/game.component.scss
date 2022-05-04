@@ -1,4 +1,5 @@
 @import "../../styles";
+
 .chessboard{
     width: 660px;
     height: 660px;
@@ -6,14 +7,14 @@
     margin-left: 20%;
     margin-top: 20px;
     border-collapse: collapse;
-    background: rgb(27, 27, 27);
-    border: 3px solid rgb(27, 27, 27);
+    background: $index-color-black;
+    border: 3px solid $index-color-black;
     position: absolute;
 }
 
 .index-vertical{
     color:rgb(255,248,220);
-    background-color: rgb(27, 27, 27);
+    background-color: $index-color-black;
     width: 20px;
     height: 98%;
     display: grid;
@@ -23,7 +24,7 @@
 
 .index-horizontal{
     color: rgb(255,248,220);
-    background-color:rgb(27, 27, 27);
+    background-color:$index-color-black;
     height: 20px;
     width: 98%;
     bottom: 0;
@@ -31,7 +32,6 @@
     position: absolute;
     display: flex;
     justify-content: space-around;
-
 }
 
 .board{
@@ -57,7 +57,7 @@ img{
   margin-top: 8px;
 }
 
-.cell.validCellBackground{
-  position: relative;
-  background-image: url("../../assets/Valid-Cell.png");
+.validCell{
+  z-index: 10;
+  justify-content: center;
 }

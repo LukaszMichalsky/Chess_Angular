@@ -8,10 +8,11 @@
         <ng-container *ngFor="let row of chessboard;let i=index">
           <ng-container *ngFor="let cell of row;let j=index">
             <div class="cell" (click)="play(chessboard[i][j])"
-            [ngStyle]="{'background-color': (i+j)%2 ? 'rgb(47,79,79)' : 'rgb(255,235,205)'}"
-            [ngClass]="{'validCellBackground' : chessboard[i][j].validCell==true}">
-              <img draggable="false" 
-              *ngIf="chessboard[i][j].type" src="assets/{{chessboard[i][j].color}}-{{chessboard[i][j].type}}.png"/>
+            [ngStyle]="{'background-color': (i+j)%2 ? 'rgb(47,79,79)' : 'rgb(255,235,205)'}">
+                <img class="validCell" *ngIf="chessboard[i][j].validCell==true" src="../../assets/Valid-Cell.png">
+                <img draggable="false"
+                *ngIf="chessboard[i][j].type" src="assets/{{chessboard[i][j].color}}-{{chessboard[i][j].type}}.png">
+
             </div>
           </ng-container>
         </ng-container>
