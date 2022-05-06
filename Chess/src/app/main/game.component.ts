@@ -10,7 +10,7 @@ import { LogicService } from '../service/logic.service';
 })
 export class GameComponent implements OnInit,OnDestroy {
   vertical_index: number[] = [];
-  horizontal_index: String[] =[]; 
+  horizontal_index: String[] =[];
   validCell: boolean=false
   chessboard: IPiece[][];
   previousClick: IPiece={
@@ -19,14 +19,14 @@ export class GameComponent implements OnInit,OnDestroy {
     validCell: false
   };
 
-  constructor(private logicService: LogicService) 
-  {    
+  constructor(private logicService: LogicService)
+  {
     if(this.logicService.isNewGame)
       this.logicService.setNewGamePieces();
-    this.chessboard = logicService.chessboard; 
+    this.chessboard = logicService.chessboard;
   }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     for(let i=1;i<9;i++)
     {
       this.horizontal_index[i-1]=String.fromCharCode(i+64);
@@ -89,19 +89,23 @@ export class GameComponent implements OnInit,OnDestroy {
       }
       else//wykonanie ruchu
       {
+        console.log("height", tab.column - this.previousClick.column);
+        console.log("width", tab.row - this.previousClick.row);
+
         tab.color=this.previousClick.color;
         tab.type=this.previousClick.type;
         this.previousClick.color=undefined;
         this.previousClick.type=undefined;
-        if((tab.row == 0 && tab.type == PieceType.Pawn) ||  (tab.row == 7 && tab.type == PieceType.Pawn)) 
+        if((tab.row == 0 && tab.type == PieceType.Pawn) ||  (tab.row == 7 && tab.type == PieceType.Pawn))
           tab.type = PieceType.Queen;
         this.logicService.clearValidMoves();
-        this.logicService.changePlayerTurn();  
+        this.logicService.changePlayerTurn();
+
       }
 
     }else
     {
-      this.logicService.clearValidMoves();//klik gdzies na tablice czysci wszsytkei validCells 
+      this.logicService.clearValidMoves();//klik gdzies na tablice czysci wszsytkei validCells
     }
   }
 }

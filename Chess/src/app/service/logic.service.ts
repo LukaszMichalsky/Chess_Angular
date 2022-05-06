@@ -28,7 +28,7 @@ export class LogicService implements OnInit{
    }
 
    ngOnInit()
-   { 
+   {
     if(this.isNewGame)
     {
       this.setNewGamePieces();
@@ -82,9 +82,9 @@ export class LogicService implements OnInit{
     for(let row of this.chessboard)
       for(let cell of row){
         cell.type = undefined;
-        cell.color = undefined; 
+        cell.color = undefined;
       }
-      
+
   }
 
   clearValidMoves(): void{

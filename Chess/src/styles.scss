@@ -5,6 +5,9 @@ $board-color-black: rgb(47,79,79);
 $index-color-black: rgb(27,27,27);
 
 
+$piece-margin: calc((80px - 64px)/2);
+$validCell-margin: calc((80px - 32px)/2);
+
 /* You can add global styles to this file, and also import other style files */
 body
 {

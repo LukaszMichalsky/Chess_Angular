@@ -9,7 +9,7 @@
         <ng-container *ngFor="let row of chessboard;let i=index">
           <ng-container *ngFor="let cell of row;let j=index">
             <div class="cell"
-            [ngStyle]="{'background-color': (i+j)%2 ? '$board-color-black' : '$board-color-white'}">
+            [ngStyle]="{'background-color': (i+j)%2 ? 'rgb(47,79,79)' : 'rgb(255,235,205)'}">
               <img
                 *ngIf="chessboard[i][j].type"
                 src="assets/{{chessboard[i][j].color}}-{{chessboard[i][j].type}}.png"
@@ -26,7 +26,7 @@
 </div>
 
   <div class="piecesPallet">
-    <div *ngFor="let piece of sidePiecesPallet">
+    <div class="cell" *ngFor="let piece of sidePiecesPallet">
       <img
       draggable="false"
         src="assets/{{piece.color}}-{{piece.type}}.png"/>

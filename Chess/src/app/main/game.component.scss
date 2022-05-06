@@ -48,16 +48,19 @@
 .cell{
   width:80px;
   height: 80px;
-  background-repeat: no-repeat;
-  background-position: center;
-  text-align: center;
+  position: relative;
 }
 
 img{
-  margin-top: 8px;
+  position: absolute;
+  top: $piece-margin;
+  left: $piece-margin;
 }
 
-.validCell{
+img.validCell{
   z-index: 10;
-  justify-content: center;
+  position: absolute;
+  top:  $validCell-margin;
+  left:  $validCell-margin;
 }
+

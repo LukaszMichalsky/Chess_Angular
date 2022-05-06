@@ -65,8 +65,10 @@ img{
   position: absolute;
   right: 30%;
   margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
 
-  div:nth-child(2n)
+  .cell:nth-child(4n+2), .cell:nth-child(4n+3)
   {
     background-color: $board-color-black;
   }
