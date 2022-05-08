@@ -72,4 +72,9 @@ img{
   {
     background-color: $board-color-black;
   }
+
+  .selected{
+    box-shadow: inset 0px 0px 0px 5px rgb(43, 43, 43);
+
+  }
 }

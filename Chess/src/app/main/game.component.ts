@@ -89,9 +89,6 @@ export class GameComponent implements OnInit,OnDestroy {
       }
       else//wykonanie ruchu
       {
-        console.log("height", tab.column - this.previousClick.column);
-        console.log("width", tab.row - this.previousClick.row);
-
         tab.color=this.previousClick.color;
         tab.type=this.previousClick.type;
         this.previousClick.color=undefined;
