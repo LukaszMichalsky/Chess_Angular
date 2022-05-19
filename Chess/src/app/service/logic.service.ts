@@ -11,6 +11,11 @@ export class LogicService implements OnInit{
   public chessboard: IPiece[][];
   public playerTurn = Color.White;//true if white player turn / false if black player turn
   public isNewGame: boolean = true;
+  public isCheck: boolean = false; //after turn check check
+
+  private _whiteLKingPosition = {row: 7, col:  3};
+  private _blackKingPosition = {row: 0, col: 4};
+
   constructor() {
     this.chessboard = [];
     for(let i=0;i<8;i++)
@@ -33,6 +38,7 @@ export class LogicService implements OnInit{
     {
       this.setNewGamePieces();
     }
+    this.searchKings();
    }
    //-----------------------FUNCTIONS------------------------
   setNewGamePieces()//pierwsze ustawienie figur
@@ -135,6 +141,35 @@ export class LogicService implements OnInit{
       this.playerTurn=Color.Black;
     else
       this.playerTurn=Color.White;
+  }
+
+  checkIsCheck(color: Color){
+    let kingColumn;
+    let kingRow;
+    if(color === Color.White){
+    kingColumn = this._whiteLKingPosition.col;
+    kingRow = this._whiteLKingPosition.row;
+    }
+    else{
+      kingColumn = this._blackKingPosition.col;
+      kingRow = this._blackKingPosition.row;
+    }
+
+
+  }
+
+  searchKings(): void{
+    for(let i = 0;i<7;i++){
+      for(let j=0;j<7;j++)
+      {
+        if(this.chessboard[i][j].type === PieceType.King)
+        {
+          this.chessboard[i][j].color === Color.White ?
+            (this._whiteLKingPosition.col = i, this._whiteLKingPosition.row = j) :
+            (this._blackKingPosition.col = i, this._blackKingPosition.row = j)
+        }
+      }
+    }
   }
   // ==============================Pieces moveset functions==========================
   PawnMovesSet(tab: IPiece): void{

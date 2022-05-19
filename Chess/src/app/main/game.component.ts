@@ -82,22 +82,27 @@ export class GameComponent implements OnInit,OnDestroy {
   {
     if(tab.color==this.logicService.playerTurn || tab.validCell==true)
     {
-      if(tab.validCell==false)//if it first click check validMoves
+      if(tab.validCell == false)//if it first click check validMoves
       {
         this.validMoves(tab);
         this.previousClick=tab;
       }
       else//wykonanie ruchu
       {
+
         tab.color=this.previousClick.color;
         tab.type=this.previousClick.type;
         this.previousClick.color=undefined;
         this.previousClick.type=undefined;
+
         if((tab.row == 0 && tab.type == PieceType.Pawn) ||  (tab.row == 7 && tab.type == PieceType.Pawn))
           tab.type = PieceType.Queen;
+
         this.logicService.clearValidMoves();
         this.logicService.changePlayerTurn();
 
+        if(tab.color)
+          this.logicService.checkIsCheck(tab.color);
       }
 
     }else
