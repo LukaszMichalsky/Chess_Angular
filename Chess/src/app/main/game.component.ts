@@ -31,7 +31,6 @@ export class GameComponent implements OnInit,OnDestroy {
     {
       this.horizontal_index[i-1]=String.fromCharCode(i+64);
       this.vertical_index[i-1]=i;
-      console.log(this.horizontal_index)
     }
     this.vertical_index.reverse();
     //stworzenie i zainicjalizowanie 2 tablic dla indeksow bo latwiej niz wpisywac recznie tablice dla ngfor
@@ -95,14 +94,18 @@ export class GameComponent implements OnInit,OnDestroy {
         this.previousClick.color=undefined;
         this.previousClick.type=undefined;
 
-        if((tab.row == 0 && tab.type == PieceType.Pawn) ||  (tab.row == 7 && tab.type == PieceType.Pawn))
+        if((tab.row == 0 && tab.type == PieceType.Pawn) ||  (tab.row == 7 && tab.type == PieceType.Pawn))//promocja piona
           tab.type = PieceType.Queen;
 
         this.logicService.clearValidMoves();
         this.logicService.changePlayerTurn();
 
-        if(tab.color)
-          this.logicService.checkIsCheck(tab.color);
+        if(tab.color)//ensure color is not undefined
+          if(this.logicService.checkIsCheck())
+          {
+            alert("Check!");
+          }
+
       }
 
     }else

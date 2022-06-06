@@ -13,8 +13,8 @@ export class LogicService implements OnInit{
   public isNewGame: boolean = true;
   public isCheck: boolean = false; //after turn check check
 
-  private _whiteLKingPosition = {row: 7, col:  3};
-  private _blackKingPosition = {row: 0, col: 4};
+  private _whiteLKingPosition = {row: 7, col:  4};
+  private _blackKingPosition = {row: 0, col: 3};
 
   constructor() {
     this.chessboard = [];
@@ -143,33 +143,71 @@ export class LogicService implements OnInit{
       this.playerTurn=Color.White;
   }
 
-  checkIsCheck(color: Color){
+  checkIsCheck() :boolean{
+    this.searchKings();
     let kingColumn;
     let kingRow;
-    if(color === Color.White){
-    kingColumn = this._whiteLKingPosition.col;
-    kingRow = this._whiteLKingPosition.row;
+    if(this.playerTurn === Color.White){// search which turn is and set kings positions
+      kingColumn = this._whiteLKingPosition.col;
+      kingRow = this._whiteLKingPosition.row;
     }
     else{
       kingColumn = this._blackKingPosition.col;
       kingRow = this._blackKingPosition.row;
     }
+    //check knight
+    let j:number;
+    for(let i=-2;i<=2;i++)
+    {
+      if(i==0) continue;
+      if(i%2==0) j=-1;
+      else j=-2;
+      for(let k=0;k<2;k++)
+      {
+        if(kingRow+i>=0 && kingRow+i<8 && kingColumn+j>=0 && kingColumn+j<8 )//is in array range
+        {
+         if(this.chessboard[kingRow+i][kingColumn+j].type === PieceType.Knight && this.chessboard[kingRow+i][kingColumn+j].color !== this.playerTurn )
+          return true
 
+        }
+        j=j*-1;
+      }
+    }
+    //check rook
+    // for(let i=kingRow-1;i>=0;i--){//from piece to up
+    //   if(this.setValidCell(i,tab.column,tab.color))
+    //     break;
+    //   }
+    //   for(let i=kingRow+1;i<8;i++){//from piece to down
+    //     if(this.setValidCell(i,tab.column,tab.color))
+    //       break;
+    //   }
+    //   for(let i=kingColumn-1;i>=0;i--){//from piece to left
+    //     if(this.setValidCell(tab.row,i,tab.color))
+    //       break;
+    //   }
+    //   for(let i=kingColumn+1;i<8;i++){//from piece to to right
+    //     if(this.setValidCell(tab.row,i,tab.color))
+    //       break;
+    //   }
 
+    return false;
   }
 
-  searchKings(): void{
+  searchKings(): void{//find starting positions
     for(let i = 0;i<7;i++){
       for(let j=0;j<7;j++)
       {
         if(this.chessboard[i][j].type === PieceType.King)
         {
           this.chessboard[i][j].color === Color.White ?
-            (this._whiteLKingPosition.col = i, this._whiteLKingPosition.row = j) :
-            (this._blackKingPosition.col = i, this._blackKingPosition.row = j)
+            (this._whiteLKingPosition.row = i, this._whiteLKingPosition.col = j) :
+            (this._blackKingPosition.row = i, this._blackKingPosition.col = j)
+
         }
       }
     }
+
   }
   // ==============================Pieces moveset functions==========================
   PawnMovesSet(tab: IPiece): void{
@@ -248,7 +286,7 @@ export class LogicService implements OnInit{
     {
       for(let j=-1;j<2;j++)
       {
-        if(tab.row+i>0 && tab.row+i<8 && tab.column+i>0 && tab.column+i<8 )//is in array range
+        if(tab.row+i>=0 && tab.row+i<=7 && tab.column+j>=0 && tab.column+j<=7 )//is in array range
         {
           this.setValidCell(tab.row+i,tab.column+j,tab.color);
         }

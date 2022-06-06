@@ -16,26 +16,24 @@ export class LoadComponent implements OnInit {
   constructor(
     private logicService: LogicService,
     private router: Router,
-  ) { 
+  ) {
   }
 
   ngOnInit(): void {
   }
- 
+
 
   dataParser(data: any): void
   {
     this.listOfPieces = JSON.parse(data);
     this.logicService.playerTurn = this.listOfPieces[0].playerTurn;
     this.listOfPieces.shift();
-    console.log(this.listOfPieces);
-
     for(let piece of this.listOfPieces){
       this.logicService.chessboard[piece.row][piece.column].type = piece.type;
       this.logicService.chessboard[piece.row][piece.column].color = piece.color;
     }
   // result structure => [row, column, type, color]
-  
+
   }
 
   loadGame($event: any)
