@@ -6,17 +6,15 @@ import { Router } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-
 export class AppComponent implements OnInit {
   title = 'Chess';
 
-  getRoute(){
+  getRoute() {
     return this.router.url;
   }
-  
-  constructor(private router: Router)
-  {}
+
+  constructor(private router: Router) {}
   ngOnInit(): void {
-    this.router.navigate([''])
+    this.router.navigate(['']);
   }
 }

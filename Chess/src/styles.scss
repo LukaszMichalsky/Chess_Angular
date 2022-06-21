@@ -1,21 +1,31 @@
 /*Variables*/
-$board-color-white: rgb(255,235,205);
-$board-color-black: rgb(47,79,79);
+$board-color-white: rgb(255, 235, 205);
+$board-color-black: rgb(47, 79, 79);
 
-$index-color-black: rgb(27,27,27);
+$index-color-black: rgb(27, 27, 27);
 
-
-$piece-margin: calc((80px - 64px)/2);
-$validCell-margin: calc((80px - 32px)/2);
+$piece-margin: calc((80px - 64px) / 2);
+$validCell-margin: calc((80px - 32px) / 2);
 
 /* You can add global styles to this file, and also import other style files */
-body
-{
-    background-image: url("./assets/marble-black.jpg");
+body {
+  background-image: url("./assets/marble-black.jpg");
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

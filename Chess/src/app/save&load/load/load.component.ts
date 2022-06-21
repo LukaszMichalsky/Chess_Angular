@@ -2,51 +2,39 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { LogicService } from 'src/app/service/logic.service';
 
-
 @Component({
   selector: 'load-component',
   templateUrl: './load.component.html',
   styleUrls: ['./load.component.css']
 })
 export class LoadComponent implements OnInit {
-
-
   listOfPieces: any;
-  size: number =0;
-  constructor(
-    private logicService: LogicService,
-    private router: Router,
-  ) {
-  }
+  size: number = 0;
+  constructor(private logicService: LogicService, private router: Router) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
-
-  dataParser(data: any): void
-  {
+  dataParser(data: any): void {
     this.listOfPieces = JSON.parse(data);
     this.logicService.playerTurn = this.listOfPieces[0].playerTurn;
     this.listOfPieces.shift();
-    for(let piece of this.listOfPieces){
+    for (let piece of this.listOfPieces) {
       this.logicService.chessboard[piece.row][piece.column].type = piece.type;
       this.logicService.chessboard[piece.row][piece.column].color = piece.color;
     }
-  // result structure => [row, column, type, color]
-
+    // result structure => [row, column, type, color]
   }
 
-  loadGame($event: any)
-  {
+  loadGame($event: any) {
     let file = $event.target.files[0];
     const fileReader = new FileReader();
     fileReader.readAsText(file);
     fileReader.onload = () => {
       this.dataParser(fileReader.result);
-    }
+    };
     fileReader.onerror = (error) => {
       console.log(error);
-    }
+    };
 
     this.logicService.isNewGame = false;
     this.logicService.clearChessboard();
