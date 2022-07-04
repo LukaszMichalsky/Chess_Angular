@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Color, IPiece, PieceType } from '../models/pieces';
-import { LogicService } from '../service/logic.service';
+import { LogicService } from '../services/logic.service';
 
 @Component({
   selector: 'app-challenge',

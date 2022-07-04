@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { LogicService } from 'src/app/service/logic.service';
+import { LogicService } from 'src/app/services/logic.service';
 
 @Component({
   selector: 'load-component',

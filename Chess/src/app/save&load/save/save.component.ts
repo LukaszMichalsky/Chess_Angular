@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { IPiece } from 'src/app/models/pieces';
-import { LogicService } from '../../service/logic.service';
+import { LogicService } from '../../services/logic.service';
 
 @Component({
   selector: 'save-component',

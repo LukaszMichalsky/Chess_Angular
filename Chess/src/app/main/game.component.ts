@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 
 import { IPiece, Color, PieceType } from '../models/pieces';
-import { LogicService } from '../service/logic.service';
+import { LogicService } from '../services/logic.service';
 
 @Component({
   selector: 'game-component',
