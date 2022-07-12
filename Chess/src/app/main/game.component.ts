@@ -97,11 +97,11 @@ export class GameComponent implements OnInit, OnDestroy {
         this.logicService.clearValidMoves();
         this.logicService.changePlayerTurn();
 
-        if (tab.color)
-          if (this.logicService.checkIsCheck()) {
-            //ensure color is not undefined
-            alert('Check!');
-          }
+        // if (tab.color)
+        //   if (this.logicService.checkIsCheck()) {
+        //     //ensure color is not undefined
+        //     alert('Check!');
+        //   }
       }
     } else {
       this.logicService.clearValidMoves(); //klik gdzies na tablice czysci wszsytkei validCells

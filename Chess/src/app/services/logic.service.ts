@@ -95,6 +95,7 @@ export class LogicService implements OnInit {
   }
 
   checkIsValidCell(row: number, col: number, color: Color | undefined): boolean {
+    //return true if cell is empty or is enemy else return false(is ally)
     let colorValue = this.chessboard[row][col].color;
     if (colorValue === undefined || colorValue !== color) {
       //if cell is empty
@@ -107,18 +108,19 @@ export class LogicService implements OnInit {
     this.chessboard[row][col].validCell = true;
   }
 
-  setPawnValid(row: number, col: number, color: Color | undefined): void {
+  setPawnValidCells(row: number, col: number, color: Color | undefined): void {
     let pawnCell = this.chessboard[row][col];
-    let rightSide = this.chessboard[row][col + 1];
-    let leftSide = this.chessboard[row][col - 1];
+    let rightSide = this.checkIsOutOfRange(row, col + 1) ? null : this.chessboard[row][col + 1];
+    let leftSide = this.checkIsOutOfRange(row, col - 1) ? null : this.chessboard[row][col - 1];
+
     let reverseColor: Color = color === Color.White ? Color.Black : Color.White;
-    if (rightSide.color == reverseColor) {
+    if (rightSide?.color === reverseColor) {
       rightSide.validCell = true;
     }
-    if (leftSide.color == reverseColor) {
+    if (leftSide?.color === reverseColor) {
       leftSide.validCell = true;
     }
-    if (pawnCell.type != undefined) {
+    if (pawnCell.type !== undefined) {
       // is   any piece forward
       pawnCell.validCell = false;
       return;
@@ -162,9 +164,56 @@ export class LogicService implements OnInit {
       }
     }
     //check rook
-    // do {
-    //   let i = 0;
-    // } while (this.checkIsOutOfRange(kingRow, kingColumn));
+    for (let i = 1; i < 8; i++) {
+      //down
+      if (this.checkIsOutOfRange(kingRow + i, kingColumn)) {
+        if (
+          this.chessboard[kingRow + i][kingColumn].type === (PieceType.Queen || PieceType.Rook) &&
+          this.chessboard[kingRow + i][kingColumn].color !== this.playerTurn
+        ) {
+          return true;
+        }
+      }
+      //up
+      if (this.checkIsOutOfRange(kingRow - i, kingColumn)) {
+        if (
+          this.chessboard[kingRow - i][kingColumn].type === (PieceType.Queen || PieceType.Rook) &&
+          this.chessboard[kingRow - i][kingColumn].color !== this.playerTurn
+        ) {
+          return true;
+        }
+      }
+      //left
+      if (this.checkIsOutOfRange(kingRow, kingColumn - i)) {
+        if (
+          this.chessboard[kingRow][kingColumn - i].type === (PieceType.Queen || PieceType.Rook) &&
+          this.chessboard[kingRow][kingColumn - i].color !== this.playerTurn
+        ) {
+          return true;
+        }
+      }
+      //right
+      if (this.checkIsOutOfRange(kingRow, kingColumn + i)) {
+        if (
+          this.chessboard[kingRow][kingColumn + i].type === (PieceType.Queen || PieceType.Rook) &&
+          this.chessboard[kingRow][kingColumn + i].color !== this.playerTurn
+        ) {
+          return true;
+        }
+      }
+      //leftUp
+      if (this.checkIsOutOfRange(kingRow - i, kingColumn - i)) {
+      }
+      //leftDown
+      if (this.checkIsOutOfRange(kingRow - i, kingColumn + i)) {
+      }
+      //rightUp
+      if (this.checkIsOutOfRange(kingRow - i, kingColumn + i)) {
+      }
+      //rightDown
+      if (this.checkIsOutOfRange(kingRow + i, kingColumn + i)) {
+      }
+    }
 
     // for (let i = kingRow - 1; i >= 0; i--) {
     //   //from piece to up
@@ -325,13 +374,13 @@ export class LogicService implements OnInit {
   }
 
   checkIsOutOfRange(row: number, col: number): boolean {
-    return row > 8 || row < 0 || col > 8 || row < 0 ? true : false;
+    return row > 7 || row < 0 || col > 7 || col < 0 ? true : false;
   }
 
   // ==============================Pieces moveset functions==========================
   PawnMovesSet(pawn: IPiece): void {
     let direction: number = pawn.color == Color.White ? -1 : 1; //1 for black -1 for white
-    this.setPawnValid(pawn.row + direction, pawn.column, pawn.color);
+    this.setPawnValidCells(pawn.row + direction, pawn.column, pawn.color);
     //black first move
     if (pawn.row == 1 && pawn.color == Color.Black && this.chessboard[3][pawn.column].type == undefined) {
       this.chessboard[3][pawn.column].validCell = true;
@@ -342,32 +391,52 @@ export class LogicService implements OnInit {
     }
   }
 
-  RookMoveSet(rook: IPiece): void {
-    for (let i = rook.row - 1; i >= 0; i--) {
-      //from piece to up
-      if (this.checkIsValidCell(i, rook.column, rook.color)) {
-        this.chessboard[i][rook.column].validCell = true;
+  RookMoveSet(tab: IPiece): void {
+    // juz ograniczona out of range
+    for (let i = tab.row - 1; i >= 0; i--) {
+      //up
+      if (this.checkIsValidCell(i, tab.column, tab.color)) {
+        //truer if empty or enemy ; false = ally
+        this.chessboard[i][tab.column].validCell = true;
+        if (!!this.chessboard[i][tab.column].color) {
+          break;
+        }
+      } else {
         break;
       }
     }
-    for (let i = rook.row + 1; i < 8; i++) {
-      //from piece to down
-      if (this.checkIsValidCell(i, rook.column, rook.color)) {
-        this.chessboard[i][rook.column].validCell = true;
+    for (let i = tab.row + 1; i < 8; i++) {
+      //down
+
+      if (this.checkIsValidCell(i, tab.column, tab.color)) {
+        this.chessboard[i][tab.column].validCell = true;
+        if (!!this.chessboard[i][tab.column].color) {
+          break;
+        }
+      } else {
         break;
       }
     }
-    for (let i = rook.column - 1; i >= 0; i--) {
-      //from piece to left
-      if (this.checkIsValidCell(rook.row, i, rook.color)) {
-        this.chessboard[rook.row][i].validCell = true;
+    for (let i = tab.column - 1; i >= 0; i--) {
+      //left
+
+      if (this.checkIsValidCell(tab.row, i, tab.color)) {
+        this.chessboard[tab.row][i].validCell = true;
+        if (!!this.chessboard[tab.row][i].color) {
+          break;
+        }
+      } else {
         break;
       }
     }
-    for (let i = rook.column + 1; i < 8; i++) {
-      //from piece to to right
-      if (this.checkIsValidCell(rook.row, i, rook.color)) {
-        this.chessboard[rook.row][i].validCell = true;
+    for (let i = tab.column + 1; i < 8; i++) {
+      //right
+      if (this.checkIsValidCell(tab.row, i, tab.color)) {
+        this.chessboard[tab.row][i].validCell = true;
+        if (!!this.chessboard[tab.row][i].color) {
+          break;
+        }
+      } else {
         break;
       }
     }
@@ -390,72 +459,77 @@ export class LogicService implements OnInit {
     }
   }
 
-  BishopMoveSet(bishop: IPiece): void {
-    for (
-      let i = 1;
-      i < 8;
-      i++ //diagonal up left
-    ) {
-      if (
-        bishop.row - i < 0 ||
-        bishop.column - i < 0 ||
-        this.checkIsValidCell(bishop.row - i, bishop.column - i, bishop.color)
-      ) {
-        this.chessboard[bishop.row - i][bishop.column - i].validCell = true;
-        break;
-      }
+  BishopMoveSet(tab: IPiece): void {
+    //diagonal up left
+
+    for (let i = 1; i < 8; i++) {
+      if (!this.checkIsOutOfRange(tab.row - i, tab.column - i)) {
+        if (this.checkIsValidCell(tab.row - i, tab.column - i, tab.color)) {
+          //truer if empty or enemy ; false = ally
+          this.chessboard[tab.row - i][tab.column - i].validCell = true;
+          if (!!this.chessboard[tab.row - i][tab.column - i].color) {
+            break;
+          }
+        } else {
+          break;
+        }
+      } else break;
     }
-    for (
-      let i = 1;
-      i < 8;
-      i++ //diagonal up right
-    ) {
-      if (
-        bishop.row - i < 0 ||
-        bishop.column + i > 7 ||
-        this.checkIsValidCell(bishop.row - i, bishop.column + i, bishop.color)
-      ) {
-        this.chessboard[bishop.row - i][bishop.column + i].validCell = true;
-        break;
-      }
+    //diagonal up right
+    for (let i = 1; i < 8; i++) {
+      if (!this.checkIsOutOfRange(tab.row - i, tab.column + i)) {
+        if (this.checkIsValidCell(tab.row - i, tab.column + i, tab.color)) {
+          //truer if empty or enemy ; false = ally
+          this.chessboard[tab.row - i][tab.column + i].validCell = true;
+          if (!!this.chessboard[tab.row - i][tab.column + i].color) {
+            break;
+          }
+        } else {
+          break;
+        }
+      } else break;
     }
-    for (
-      let i = 1;
-      i < 8;
-      i++ //diagonal down right
-    ) {
-      if (
-        bishop.row + i > 7 ||
-        bishop.column + i > 7 ||
-        this.checkIsValidCell(bishop.row + i, bishop.column + i, bishop.color)
-      ) {
-        this.chessboard[bishop.row + i][bishop.column + i].validCell = true;
-        break;
-      }
+    //diagonal down right
+    for (let i = 1; i < 8; i++) {
+      if (!this.checkIsOutOfRange(tab.row + i, tab.column + i)) {
+        if (this.checkIsValidCell(tab.row + i, tab.column + i, tab.color)) {
+          //truer if empty or enemy ; false = ally
+          this.chessboard[tab.row + i][tab.column + i].validCell = true;
+          if (!!this.chessboard[tab.row + i][tab.column + i].color) {
+            break;
+          }
+        } else {
+          break;
+        }
+      } else break;
     }
-    for (
-      let i = 1;
-      i < 8;
-      i++ //diagonal down left
-    ) {
-      if (
-        bishop.row + i > 7 ||
-        bishop.column - i < 0 ||
-        this.checkIsValidCell(bishop.row + i, bishop.column - i, bishop.color)
-      ) {
-        this.chessboard[bishop.row + i][bishop.column - i].validCell = true;
-        break;
-      }
+
+    // //diagonal down left
+    for (let i = 1; i < 8; i++) {
+      if (!this.checkIsOutOfRange(tab.row + i, tab.column - i)) {
+        if (this.checkIsValidCell(tab.row + i, tab.column - i, tab.color)) {
+          //truer if empty or enemy ; false = ally
+          this.chessboard[tab.row + i][tab.column - i].validCell = true;
+          if (!!this.chessboard[tab.row + i][tab.column - i].color) {
+            break;
+          }
+        } else {
+          break;
+        }
+      } else break;
     }
   }
 
-  KingMoveSet(king: IPiece): void {
+  KingMoveSet(tab: IPiece): void {
+    // tba => tabcell wkladana do funkjcji zbye ja przeskanowac
+
     for (let i = -1; i < 2; i++) {
       for (let j = -1; j < 2; j++) {
-        if (king.row + i >= 0 && king.row + i <= 7 && king.column + j >= 0 && king.column + j <= 7) {
+        if (!this.checkIsOutOfRange(tab.row + i, tab.column + j)) {
           //check if is in array range then check pieces
-          if (this.checkIsValidCell(king.row + i, king.column + j, king.color))
-            this.chessboard[king.row + i][king.column + i].validCell = true;
+
+          if (this.checkIsValidCell(tab.row + i, tab.column + j, tab.color))
+            this.chessboard[tab.row + i][tab.column + j].validCell = true;
         }
       }
     }
