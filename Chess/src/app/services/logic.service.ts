@@ -145,6 +145,8 @@ export class LogicService implements OnInit {
       kingColumn = this._blackKingPosition.col;
       kingRow = this._blackKingPosition.row;
     }
+    console.log(kingRow, kingColumn);
+
     //check knight
     let j: number;
     for (let i = -2; i <= 2; i++) {
@@ -152,7 +154,7 @@ export class LogicService implements OnInit {
       if (i % 2 == 0) j = -1;
       else j = -2;
       for (let k = 0; k < 2; k++) {
-        if (kingRow + i >= 0 && kingRow + i < 8 && kingColumn + j >= 0 && kingColumn + j < 8) {
+        if (!this.checkIsOutOfRange(kingRow + i, kingColumn + j)) {
           //is in array range
           if (
             this.chessboard[kingRow + i][kingColumn + j].type === PieceType.Knight &&
@@ -163,10 +165,9 @@ export class LogicService implements OnInit {
         j = j * -1;
       }
     }
-    //check rook
+    //down
     for (let i = 1; i < 8; i++) {
-      //down
-      if (this.checkIsOutOfRange(kingRow + i, kingColumn)) {
+      if (!this.checkIsOutOfRange(kingRow + i, kingColumn)) {
         if (
           this.chessboard[kingRow + i][kingColumn].type === (PieceType.Queen || PieceType.Rook) &&
           this.chessboard[kingRow + i][kingColumn].color !== this.playerTurn
@@ -174,8 +175,10 @@ export class LogicService implements OnInit {
           return true;
         }
       }
-      //up
-      if (this.checkIsOutOfRange(kingRow - i, kingColumn)) {
+    }
+    //up
+    for (let i = 1; i < 8; i++) {
+      if (!this.checkIsOutOfRange(kingRow - i, kingColumn)) {
         if (
           this.chessboard[kingRow - i][kingColumn].type === (PieceType.Queen || PieceType.Rook) &&
           this.chessboard[kingRow - i][kingColumn].color !== this.playerTurn
@@ -183,8 +186,9 @@ export class LogicService implements OnInit {
           return true;
         }
       }
-      //left
-      if (this.checkIsOutOfRange(kingRow, kingColumn - i)) {
+    } //left
+    for (let i = 1; i < 8; i++) {
+      if (!this.checkIsOutOfRange(kingRow, kingColumn - i)) {
         if (
           this.chessboard[kingRow][kingColumn - i].type === (PieceType.Queen || PieceType.Rook) &&
           this.chessboard[kingRow][kingColumn - i].color !== this.playerTurn
@@ -192,8 +196,9 @@ export class LogicService implements OnInit {
           return true;
         }
       }
-      //right
-      if (this.checkIsOutOfRange(kingRow, kingColumn + i)) {
+    } //right
+    for (let i = 1; i < 8; i++) {
+      if (!this.checkIsOutOfRange(kingRow, kingColumn + i)) {
         if (
           this.chessboard[kingRow][kingColumn + i].type === (PieceType.Queen || PieceType.Rook) &&
           this.chessboard[kingRow][kingColumn + i].color !== this.playerTurn
@@ -201,162 +206,48 @@ export class LogicService implements OnInit {
           return true;
         }
       }
-      //leftUp
-      if (this.checkIsOutOfRange(kingRow - i, kingColumn - i)) {
+    }
+    //leftUp
+    for (let i = 1; i < 8; i++) {
+      if (!this.checkIsOutOfRange(kingRow - i, kingColumn - i)) {
+        if (this.checkIsValidCell(kingRow - i, kingColumn - i, this.playerTurn)) {
+          //true if empty or enemy ; false = ally
+          if (this.chessboard[kingRow - i][kingColumn - i].type === (PieceType.Bishop || PieceType.Queen)) return true;
+        } else break;
       }
-      //leftDown
-      if (this.checkIsOutOfRange(kingRow - i, kingColumn + i)) {
+      break;
+    } //leftDown
+    for (let i = 1; i < 8; i++) {
+      if (!this.checkIsOutOfRange(kingRow - i, kingColumn + i)) {
+        if (
+          this.chessboard[kingRow][kingColumn + i].type === (PieceType.Queen || PieceType.Bishop) &&
+          this.chessboard[kingRow][kingColumn + i].color !== this.playerTurn
+        ) {
+          return true;
+        }
       }
-      //rightUp
-      if (this.checkIsOutOfRange(kingRow - i, kingColumn + i)) {
-      }
-      //rightDown
-      if (this.checkIsOutOfRange(kingRow + i, kingColumn + i)) {
+    } //rightUp
+    for (let i = 1; i < 8; i++) {
+      if (!this.checkIsOutOfRange(kingRow - i, kingColumn + i)) {
+        if (
+          this.chessboard[kingRow][kingColumn + i].type === (PieceType.Queen || PieceType.Bishop) &&
+          this.chessboard[kingRow][kingColumn + i].color !== this.playerTurn
+        ) {
+          return true;
+        }
       }
     }
-
-    // for (let i = kingRow - 1; i >= 0; i--) {
-    //   //from piece to up
-    //   if (this.chessboard[kingRow + i][kingColumn].type !== undefined) {
-    //     if (
-    //       this.chessboard[kingRow + i][kingColumn].type === (PieceType.Rook || PieceType.Queen) &&
-    //       this.chessboard[kingRow + i][kingColumn].color !== this.playerTurn
-    //     ) {
-    //       return true;
-    //     } else {
-    //       break;
-    //     }
-    //   }
-    // }
-    // for (let i = kingRow + 1; i < 8; i++) {
-    //   //from piece to down
-    //   if (this.chessboard[kingRow + i][kingColumn].type !== undefined) {
-    //     if (
-    //       this.chessboard[kingRow + i][kingColumn].type === (PieceType.Rook || PieceType.Queen) &&
-    //       this.chessboard[kingRow + i][kingColumn].color !== this.playerTurn
-    //     ) {
-    //       return true;
-    //     } else {
-    //       break;
-    //     }
-    //   }
-    // }
-    // for (let i = kingColumn - 1; i >= 0; i--) {
-    //   //from piece to left
-    //   if (this.chessboard[kingRow + i][kingColumn].type !== undefined) {
-    //     if (
-    //       this.chessboard[kingRow][kingColumn + i].type === (PieceType.Rook || PieceType.Queen) &&
-    //       this.chessboard[kingRow][kingColumn + i].color !== this.playerTurn
-    //     ) {
-    //       return true;
-    //     } else {
-    //       break;
-    //     }
-    //   }
-    // }
-    // for (let i = kingColumn + 1; i < 8; i++) {
-    //   //from piece to to right
-    //   if (this.chessboard[kingRow + i][kingColumn].type !== undefined) {
-    //     if (
-    //       this.chessboard[kingRow][kingColumn + i].type === (PieceType.Rook || PieceType.Queen) &&
-    //       this.chessboard[kingRow][kingColumn + i].color !== this.playerTurn
-    //     ) {
-    //       return true;
-    //     } else {
-    //       break;
-    //     }
-    //   }
-    // }
-    // //check bishop
-    // for (let i = 1; i < 8; i++) {
-    //   //diagonal up left
-    //   if (kingRow - i < 0 || kingColumn - i < 0 || this.chessboard[kingRow - i][kingColumn - i].type !== undefined) {
-    //     if (
-    //       this.chessboard[kingRow - i][kingColumn - i].type === (PieceType.Bishop || PieceType.Queen) &&
-    //       this.chessboard[kingRow][kingColumn + i].color !== this.playerTurn
-    //     ) {
-    //       return true;
-    //     } else {
-    //       break;
-    //     }
-    //   }
-    // }
-    // for (let i = 1; i < 8; i++) {
-    //   //diagonal up right
-    //   if (kingRow - i < 0 || kingColumn + i < 0 || this.chessboard[kingRow - i][kingColumn + i].type !== undefined) {
-    //     if (
-    //       this.chessboard[kingRow - i][kingColumn - i].type === (PieceType.Bishop || PieceType.Queen) &&
-    //       this.chessboard[kingRow][kingColumn + i].color !== this.playerTurn
-    //     ) {
-    //       return true;
-    //     } else {
-    //       break;
-    //     }
-    //   }
-    // }
-    // for (let i = 1; i < 8; i++) {
-    //   //diagonal down right
-    //   if (kingRow + i > 0 || kingColumn + i > 0 || this.chessboard[kingRow + i][kingColumn + i].type !== undefined) {
-    //     if (
-    //       this.chessboard[kingRow - i][kingColumn - i].type === (PieceType.Bishop || PieceType.Queen) &&
-    //       this.chessboard[kingRow][kingColumn + i].color !== this.playerTurn
-    //     ) {
-    //       return true;
-    //     } else {
-    //       break;
-    //     }
-    //   }
-    // }
-    // for (let i = 1; i < 8; i++) {
-    //   //diagonal down left
-    //   if (kingRow + i > 7 || kingColumn - i < 0 || this.chessboard[kingRow + i][kingColumn - i].type !== undefined) {
-    //     if (
-    //       this.chessboard[kingRow - i][kingColumn - i].type === (PieceType.Bishop || PieceType.Queen) &&
-    //       this.chessboard[kingRow][kingColumn + i].color !== this.playerTurn
-    //     ) {
-    //       return true;
-    //     } else {
-    //       break;
-    //     }
-    //   }
-    // }
-    // //check pawn
-    // console.log(
-    //   !this.isOutOfRange(kingRow + 1, kingColumn - 1) &&
-    //     this.chessboard[kingRow + 1][kingColumn - 1].type == PieceType.Pawn &&
-    //     this.chessboard[kingRow + 1][kingColumn - 1].color == Color.White
-    // );
-    // console.log(kingRow + 1, kingColumn + 1);
-
-    // if (
-    //   !this.isOutOfRange(kingRow + 1, kingColumn - 1) &&
-    //   this.chessboard[kingRow + 1][kingColumn - 1].type == PieceType.Pawn &&
-    //   this.chessboard[kingRow + 1][kingColumn - 1].color == Color.White
-    // )
-    //   return true;
-    // if (
-    //   !this.isOutOfRange(kingRow + 1, kingColumn + 1) &&
-    //   this.chessboard[kingRow + 1][kingColumn + 1].type == PieceType.Pawn &&
-    //   this.chessboard[kingRow + 1][kingColumn + 1].color == Color.White
-    // )
-    //   return true;
-    // if (
-    //   ((this.chessboard[kingRow + 1][kingColumn - 1].type &&
-    //     this.chessboard[kingRow + 1][kingColumn - 1].color === Color.Black) ||
-    //     this.chessboard[kingRow + 1][kingColumn + 1].type) == PieceType.Pawn &&
-    //   this.chessboard[kingRow + 1][kingColumn].color !== this.playerTurn
-    // ) {
-    //   return true;
-    // }
-    // if (
-    //   ((this.chessboard[kingRow - 1][kingColumn - 1].type &&
-    //     this.chessboard[kingRow - 1][kingColumn - 1].color === Color.White) ||
-    //     this.chessboard[kingRow - 1][kingColumn + 1].type) == PieceType.Pawn &&
-    //   this.chessboard[kingRow - 1][kingColumn].color !== this.playerTurn
-    // ) {
-    //   return true;
-    // }
-
+    //rightDown
+    for (let i = 1; i < 8; i++) {
+      if (!this.checkIsOutOfRange(kingRow + i, kingColumn + i)) {
+        if (
+          this.chessboard[kingRow][kingColumn + i].type === (PieceType.Queen || PieceType.Bishop) &&
+          this.chessboard[kingRow][kingColumn + i].color !== this.playerTurn
+        ) {
+          return true;
+        }
+      }
+    }
     return false;
   }
 
@@ -540,3 +431,4 @@ export class LogicService implements OnInit {
     this.BishopMoveSet(queen);
   }
 }
+//jenda petla z flagami chyba gorsza niz kilka petli przerywajacych sie bo za kazdymn razem musi i tak sprawdzac jak jede tru to wejdz do niego
