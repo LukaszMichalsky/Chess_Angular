@@ -9,6 +9,8 @@ $validCell-margin: calc((80px - 32px) / 2);
 
 /* You can add global styles to this file, and also import other style files */
 body {
+  background: no-repeat;
+  background-size: cover;
   background-image: url("./assets/marble-black.jpg");
 }
 

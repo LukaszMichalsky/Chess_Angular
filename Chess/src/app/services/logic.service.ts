@@ -145,8 +145,6 @@ export class LogicService implements OnInit {
       kingColumn = this._blackKingPosition.col;
       kingRow = this._blackKingPosition.row;
     }
-    console.log(kingRow, kingColumn);
-
     //check knight
     let j: number;
     for (let i = -2; i <= 2; i++) {
@@ -165,88 +163,40 @@ export class LogicService implements OnInit {
         j = j * -1;
       }
     }
-    //down
-    for (let i = 1; i < 8; i++) {
-      if (!this.checkIsOutOfRange(kingRow + i, kingColumn)) {
+
+    for (let i = kingRow - 1; i >= 0; i--) {
+      //up
+      if (this.checkIsValidCell(i, kingColumn, this.playerTurn)) {
         if (
-          this.chessboard[kingRow + i][kingColumn].type === (PieceType.Queen || PieceType.Rook) &&
-          this.chessboard[kingRow + i][kingColumn].color !== this.playerTurn
-        ) {
+          this.chessboard[i][kingColumn].type === PieceType.Rook ||
+          this.chessboard[i][kingColumn].type === PieceType.Queen
+        )
           return true;
-        }
-      }
+      } else break;
     }
-    //up
-    for (let i = 1; i < 8; i++) {
-      if (!this.checkIsOutOfRange(kingRow - i, kingColumn)) {
+    for (let i = kingRow + 1; i < 8; i++) {
+      //down
+      if (this.checkIsValidCell(i, kingColumn, this.playerTurn)) {
         if (
-          this.chessboard[kingRow - i][kingColumn].type === (PieceType.Queen || PieceType.Rook) &&
-          this.chessboard[kingRow - i][kingColumn].color !== this.playerTurn
-        ) {
+          this.chessboard[i][kingColumn].type === PieceType.Rook ||
+          this.chessboard[i][kingColumn].type === PieceType.Queen
+        )
           return true;
-        }
-      }
-    } //left
-    for (let i = 1; i < 8; i++) {
-      if (!this.checkIsOutOfRange(kingRow, kingColumn - i)) {
-        if (
-          this.chessboard[kingRow][kingColumn - i].type === (PieceType.Queen || PieceType.Rook) &&
-          this.chessboard[kingRow][kingColumn - i].color !== this.playerTurn
-        ) {
-          return true;
-        }
-      }
-    } //right
-    for (let i = 1; i < 8; i++) {
-      if (!this.checkIsOutOfRange(kingRow, kingColumn + i)) {
-        if (
-          this.chessboard[kingRow][kingColumn + i].type === (PieceType.Queen || PieceType.Rook) &&
-          this.chessboard[kingRow][kingColumn + i].color !== this.playerTurn
-        ) {
-          return true;
-        }
-      }
+      } else break;
     }
-    //leftUp
-    for (let i = 1; i < 8; i++) {
-      if (!this.checkIsOutOfRange(kingRow - i, kingColumn - i)) {
-        if (this.checkIsValidCell(kingRow - i, kingColumn - i, this.playerTurn)) {
-          //true if empty or enemy ; false = ally
-          if (this.chessboard[kingRow - i][kingColumn - i].type === (PieceType.Bishop || PieceType.Queen)) return true;
-        } else break;
-      }
-      break;
-    } //leftDown
-    for (let i = 1; i < 8; i++) {
-      if (!this.checkIsOutOfRange(kingRow - i, kingColumn + i)) {
-        if (
-          this.chessboard[kingRow][kingColumn + i].type === (PieceType.Queen || PieceType.Bishop) &&
-          this.chessboard[kingRow][kingColumn + i].color !== this.playerTurn
-        ) {
+    for (let i = kingColumn - 1; i >= 0; i--) {
+      //left
+      if (this.checkIsValidCell(kingRow, i, this.playerTurn)) {
+        if (this.chessboard[kingRow][i].type === PieceType.Rook || this.chessboard[kingRow][i].type === PieceType.Queen)
           return true;
-        }
-      }
-    } //rightUp
-    for (let i = 1; i < 8; i++) {
-      if (!this.checkIsOutOfRange(kingRow - i, kingColumn + i)) {
-        if (
-          this.chessboard[kingRow][kingColumn + i].type === (PieceType.Queen || PieceType.Bishop) &&
-          this.chessboard[kingRow][kingColumn + i].color !== this.playerTurn
-        ) {
-          return true;
-        }
-      }
+      } else break;
     }
-    //rightDown
-    for (let i = 1; i < 8; i++) {
-      if (!this.checkIsOutOfRange(kingRow + i, kingColumn + i)) {
-        if (
-          this.chessboard[kingRow][kingColumn + i].type === (PieceType.Queen || PieceType.Bishop) &&
-          this.chessboard[kingRow][kingColumn + i].color !== this.playerTurn
-        ) {
+    for (let i = kingColumn + 1; i < 8; i++) {
+      //right
+      if (this.checkIsValidCell(kingRow, i, this.playerTurn)) {
+        if (this.chessboard[kingRow][i].type === PieceType.Rook || this.chessboard[kingRow][i].type === PieceType.Queen)
           return true;
-        }
-      }
+      } else break;
     }
     return false;
   }
@@ -298,7 +248,6 @@ export class LogicService implements OnInit {
     }
     for (let i = tab.row + 1; i < 8; i++) {
       //down
-
       if (this.checkIsValidCell(i, tab.column, tab.color)) {
         this.chessboard[i][tab.column].validCell = true;
         if (!!this.chessboard[i][tab.column].color) {

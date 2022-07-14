@@ -87,6 +87,7 @@ export class GameComponent implements OnInit, OnDestroy {
       else {
         tab.color = this.previousClick.color;
         tab.type = this.previousClick.type;
+
         this.previousClick.color = undefined;
         this.previousClick.type = undefined;
 
@@ -96,7 +97,9 @@ export class GameComponent implements OnInit, OnDestroy {
 
         this.logicService.clearValidMoves();
         this.logicService.changePlayerTurn();
-        if (this.logicService.checkIsCheck()) alert('Check!');
+        if (this.logicService.checkIsCheck()) {
+          alert('Check!');
+        }
       }
     } else {
       this.logicService.clearValidMoves(); //klik gdzies na tablice czysci wszsytkei validCells
