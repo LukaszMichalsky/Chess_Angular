@@ -198,6 +198,71 @@ export class LogicService implements OnInit {
           return true;
       } else break;
     }
+
+    //diagonal leftUp
+    for (let i = 1; i < 8; i++) {
+      if (!this.checkIsOutOfRange(kingRow - i, kingColumn - i)) {
+        if (this.checkIsValidCell(kingRow - i, kingColumn - i, this.playerTurn)) {
+          if (
+            this.chessboard[kingRow - i][kingColumn - i].type === PieceType.Bishop ||
+            this.chessboard[kingRow - i][kingColumn - i].type === PieceType.Queen
+          ) {
+            return true;
+          }
+        } else {
+          break;
+        }
+      } else break;
+    }
+
+    //diagonal upRight
+    for (let i = 1; i < 8; i++) {
+      if (!this.checkIsOutOfRange(kingRow - i, kingColumn + i)) {
+        if (this.checkIsValidCell(kingRow - i, kingColumn + i, this.playerTurn)) {
+          if (
+            this.chessboard[kingRow - i][kingColumn + i].type === PieceType.Bishop ||
+            this.chessboard[kingRow - i][kingColumn + i].type === PieceType.Queen
+          ) {
+            return true;
+          }
+        } else {
+          break;
+        }
+      } else break;
+    }
+
+    //diagonal downRight
+    for (let i = 1; i < 8; i++) {
+      if (!this.checkIsOutOfRange(kingRow + i, kingColumn + i)) {
+        if (this.checkIsValidCell(kingRow + i, kingColumn + i, this.playerTurn)) {
+          if (
+            this.chessboard[kingRow + i][kingColumn + i].type === PieceType.Bishop ||
+            this.chessboard[kingRow + i][kingColumn + i].type === PieceType.Queen
+          ) {
+            return true;
+          }
+        } else {
+          break;
+        }
+      } else break;
+    }
+
+    //diagonal downLeft
+    for (let i = 1; i < 8; i++) {
+      if (!this.checkIsOutOfRange(kingRow + i, kingColumn - i)) {
+        if (this.checkIsValidCell(kingRow + i, kingColumn - i, this.playerTurn)) {
+          if (
+            this.chessboard[kingRow + i][kingColumn - i].type === PieceType.Bishop ||
+            this.chessboard[kingRow + i][kingColumn - i].type === PieceType.Queen
+          ) {
+            return true;
+          }
+        } else {
+          break;
+        }
+      } else break;
+    }
+
     return false;
   }
 
@@ -305,7 +370,6 @@ export class LogicService implements OnInit {
     for (let i = 1; i < 8; i++) {
       if (!this.checkIsOutOfRange(tab.row - i, tab.column - i)) {
         if (this.checkIsValidCell(tab.row - i, tab.column - i, tab.color)) {
-          //truer if empty or enemy ; false = ally
           this.chessboard[tab.row - i][tab.column - i].validCell = true;
           if (!!this.chessboard[tab.row - i][tab.column - i].color) {
             break;
@@ -319,7 +383,6 @@ export class LogicService implements OnInit {
     for (let i = 1; i < 8; i++) {
       if (!this.checkIsOutOfRange(tab.row - i, tab.column + i)) {
         if (this.checkIsValidCell(tab.row - i, tab.column + i, tab.color)) {
-          //truer if empty or enemy ; false = ally
           this.chessboard[tab.row - i][tab.column + i].validCell = true;
           if (!!this.chessboard[tab.row - i][tab.column + i].color) {
             break;
@@ -333,7 +396,6 @@ export class LogicService implements OnInit {
     for (let i = 1; i < 8; i++) {
       if (!this.checkIsOutOfRange(tab.row + i, tab.column + i)) {
         if (this.checkIsValidCell(tab.row + i, tab.column + i, tab.color)) {
-          //truer if empty or enemy ; false = ally
           this.chessboard[tab.row + i][tab.column + i].validCell = true;
           if (!!this.chessboard[tab.row + i][tab.column + i].color) {
             break;
@@ -348,7 +410,6 @@ export class LogicService implements OnInit {
     for (let i = 1; i < 8; i++) {
       if (!this.checkIsOutOfRange(tab.row + i, tab.column - i)) {
         if (this.checkIsValidCell(tab.row + i, tab.column - i, tab.color)) {
-          //truer if empty or enemy ; false = ally
           this.chessboard[tab.row + i][tab.column - i].validCell = true;
           if (!!this.chessboard[tab.row + i][tab.column - i].color) {
             break;
