@@ -1,4 +1,4 @@
-<div class="chessboard">
+<div [ngStyle]="{ 'pointer-events': gameOverFlag ? 'none' : 'auto' }" class="chessboard">
   <div class="index-vertical">
     <span *ngFor="let v_index of vertical_index">
       {{ v_index }}

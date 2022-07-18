@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { LogicService } from 'src/app/services/logic.service';
 
@@ -8,6 +8,7 @@ import { LogicService } from 'src/app/services/logic.service';
   styleUrls: ['./load.component.css']
 })
 export class LoadComponent implements OnInit {
+  @ViewChild('loadInput') loadInput: ElementRef;
   listOfPieces: any;
   size: number = 0;
   constructor(private logicService: LogicService, private router: Router) {}
@@ -40,5 +41,8 @@ export class LoadComponent implements OnInit {
     this.logicService.clearChessboard();
 
     this.router.navigate(['/game']);
+  }
+  loadFile() {
+    this.loadInput.nativeElement.click();
   }
 }

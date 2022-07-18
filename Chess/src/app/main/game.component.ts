@@ -9,6 +9,7 @@ import { LogicService } from '../services/logic.service';
   styleUrls: ['./game.component.scss']
 })
 export class GameComponent implements OnInit, OnDestroy {
+  gameOverFlag: boolean = false;
   vertical_index: number[] = [];
   horizontal_index: String[] = [];
   validCell: boolean = false;
@@ -85,7 +86,12 @@ export class GameComponent implements OnInit, OnDestroy {
         this.previousClick = tab;
       } //wykonanie ruchu
       else {
+        if (tab.type === PieceType.King) {
+          this.gameOverFlag = true;
+          alert('Game Over!');
+        }
         tab.color = this.previousClick.color;
+
         tab.type = this.previousClick.type;
 
         this.previousClick.color = undefined;

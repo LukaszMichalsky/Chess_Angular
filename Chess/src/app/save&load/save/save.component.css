@@ -2,3 +2,7 @@ a {
   text-decoration: none;
   color: black;
 }
+
+.nav-button {
+  width: 7rem;
+}

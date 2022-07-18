@@ -1,1 +1,2 @@
-<input type="file" accept=".json" (change)="loadGame($event)" />
+<button class="nav-button load-label" (click)="loadFile()">Load File</button>
+<input #loadInput style="display: none" type="file" accept=".json" (change)="loadGame($event)" />

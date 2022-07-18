@@ -10,6 +10,7 @@
         <div class="cell" [ngStyle]="{ 'background-color': (i + j) % 2 ? 'rgb(47,79,79)' : 'rgb(255,235,205)' }">
           <img
             *ngIf="chessboard[i][j].type"
+            class="piece"
             src="assets/{{ chessboard[i][j].color }}-{{ chessboard[i][j].type }}.svg"
             draggable="false"
           />
@@ -26,7 +27,7 @@
 
 <div class="piecesPallet">
   <div class="cell" *ngFor="let piece of sidePiecesPallet">
-    <img draggable="false" src="assets/{{ piece.color }}-{{ piece.type }}.svg" />
+    <img class="piece" draggable="false" src="assets/{{ piece.color }}-{{ piece.type }}.svg" />
   </div>
 </div>
 <save-component></save-component>
