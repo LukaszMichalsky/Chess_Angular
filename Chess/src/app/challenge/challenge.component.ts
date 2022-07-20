@@ -2,6 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Color, IPiece, PieceType } from '../models/pieces';
 import { LogicService } from '../services/logic.service';
 
+export interface arrayPalletInterface {
+  type: PieceType;
+  readonly limit: number;
+  count: number;
+}
 @Component({
   selector: 'app-challenge',
   templateUrl: './challenge.component.html',
@@ -13,6 +18,19 @@ export class ChallengeComponent implements OnInit {
   sidePiecesPallet: Array<{ type: PieceType; color: Color }> = [];
   vertical_index: number[] = [];
   horizontal_index: String[] = [];
+
+  whitePieces: arrayPalletInterface[] = [
+    { type: PieceType.King, limit: 1, count: 0 },
+    { type: PieceType.Queen, limit: 1, count: 0 },
+    { type: PieceType.Rook, limit: 2, count: 0 },
+    { type: PieceType.Knight, limit: 2, count: 0 },
+    { type: PieceType.Bishop, limit: 2, count: 0 },
+    { type: PieceType.Pawn, limit: 8, count: 0 }
+  ];
+  blackPieces: arrayPalletInterface;
+
+  dataTransfer: Element;
+
   constructor(private logicService: LogicService) {
     this.chessboard = logicService.chessboard;
   }
@@ -32,4 +50,39 @@ export class ChallengeComponent implements OnInit {
       this.sidePiecesPallet.push({ type: PieceType[key], color: Color.Black });
     }
   }
+
+  allowDrop($event: Event) {
+    $event.preventDefault();
+  }
+
+  onDrag($event: any) {
+    $event.effectAllowed = 'clone';
+    this.dataTransfer = $event.target.cloneNode();
+  }
+
+  onDrop($event: any) {
+    $event.stopPropagation();
+    $event.target.appendChild(this.dataTransfer);
+  }
+
+  // startDragging($event: any) {
+  //   console.log('start');
+  //   $event.effectAllowed = 'clone';
+  //   $event.dataTransfer.setData('text', $event.target);
+  // }
+
+  // endDragging($event: Event) {
+  //   console.log('asdsa', $event.target);
+  // }
+
+  // onDragLeave($event: Event) {
+  //   $event.stopPropagation();
+  //   $event.preventDefault();
+  // }
+
+  //  onDragEnter($event) {}
+
+  // onDrop($event: Event) {
+  //   $event.stopPropagation();
+  // }
 }

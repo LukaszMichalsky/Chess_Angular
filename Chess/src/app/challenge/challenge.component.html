@@ -7,14 +7,12 @@
   <div class="board">
     <ng-container *ngFor="let row of chessboard; let i = index">
       <ng-container *ngFor="let cell of row; let j = index">
-        <div class="cell" [ngStyle]="{ 'background-color': (i + j) % 2 ? 'rgb(47,79,79)' : 'rgb(255,235,205)' }">
-          <img
-            *ngIf="chessboard[i][j].type"
-            class="piece"
-            src="assets/{{ chessboard[i][j].color }}-{{ chessboard[i][j].type }}.svg"
-            draggable="false"
-          />
-        </div>
+        <div
+          (dragover)="allowDrop($event)"
+          (drop)="onDrop($event)"
+          class="cell"
+          [ngStyle]="{ 'background-color': (i + j) % 2 ? 'rgb(47,79,79)' : 'rgb(255,235,205)' }"
+        ></div>
       </ng-container>
     </ng-container>
   </div>
@@ -27,7 +25,12 @@
 
 <div class="piecesPallet">
   <div class="cell" *ngFor="let piece of sidePiecesPallet">
-    <img class="piece" draggable="false" src="assets/{{ piece.color }}-{{ piece.type }}.svg" />
+    <img
+      (dragstart)="onDrag($event)"
+      class="piece"
+      draggable="true"
+      src="assets/{{ piece.color }}-{{ piece.type }}.svg"
+    />
   </div>
 </div>
 <save-component></save-component>

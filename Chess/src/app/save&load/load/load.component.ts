@@ -42,6 +42,7 @@ export class LoadComponent implements OnInit {
 
     this.router.navigate(['/game']);
   }
+
   loadFile() {
     this.loadInput.nativeElement.click();
   }
