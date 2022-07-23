@@ -4,8 +4,7 @@ import { LogicService } from 'src/app/services/logic.service';
 
 @Component({
   selector: 'load-component',
-  templateUrl: './load.component.html',
-  styleUrls: ['./load.component.css']
+  templateUrl: './load.component.html'
 })
 export class LoadComponent implements OnInit {
   @ViewChild('loadInput') loadInput: ElementRef;

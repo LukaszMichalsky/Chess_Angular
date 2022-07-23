@@ -8,6 +8,7 @@
     <ng-container *ngFor="let row of chessboard; let i = index">
       <ng-container *ngFor="let cell of row; let j = index">
         <div
+          #chessboardCell
           (dragover)="allowDrop($event)"
           (drop)="onDrop($event)"
           class="cell"
@@ -24,13 +25,16 @@
 </div>
 
 <div class="piecesPallet">
-  <div class="cell" *ngFor="let piece of sidePiecesPallet">
+  <div class="cell" *ngFor="let piece of sidePiecesPallet; let i = index">
     <img
+      #palletCell
       (dragstart)="onDrag($event)"
       class="piece"
       draggable="true"
       src="assets/{{ piece.color }}-{{ piece.type }}.svg"
+      id="{{ piece.color }}-{{ piece.type }}"
     />
   </div>
 </div>
+<button class="nav-button clear-chessboard" (click)="resetAll()">Clear board</button>
 <save-component></save-component>

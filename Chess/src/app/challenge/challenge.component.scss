@@ -19,6 +19,7 @@
   display: grid;
   align-items: center;
   justify-content: center;
+  pointer-events: none;
 }
 
 .index-horizontal {
@@ -31,6 +32,7 @@
   position: absolute;
   display: flex;
   justify-content: space-around;
+  pointer-events: none;
 }
 
 .board {
@@ -59,7 +61,6 @@ img {
 .piece {
   height: 64px;
   width: 64px;
-  cursor: grab;
 }
 
 .piecesPallet {
@@ -81,4 +82,12 @@ img {
   .selected {
     box-shadow: inset 0px 0px 0px 5px rgb(43, 43, 43);
   }
+}
+
+.clear-chessboard {
+  position: absolute;
+  right: 30%;
+  width: calc(10rem + 6px);
+  top: 550px;
+  margin: 1rem 0 0;
 }

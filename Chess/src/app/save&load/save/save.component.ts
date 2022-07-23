@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { IPiece } from 'src/app/models/pieces';
 import { LogicService } from '../../services/logic.service';
@@ -6,9 +6,9 @@ import { LogicService } from '../../services/logic.service';
 @Component({
   selector: 'save-component',
   templateUrl: './save.component.html',
-  styleUrls: ['./save.component.css']
+  styleUrls: ['./save.component.scss']
 })
-export class SaveComponent implements OnInit {
+export class SaveComponent {
   options = {
     fieldSeparator: ',',
     quoteStrings: '',
@@ -20,12 +20,9 @@ export class SaveComponent implements OnInit {
     useBom: true,
     useKeysAsHeaders: false
   };
-
   fileUrl: any;
 
   constructor(private sanitizer: DomSanitizer, private readonly logicService: LogicService) {}
-
-  ngOnInit(): void {}
 
   saveToFile() {
     let json = JSON.stringify(this.filterData());

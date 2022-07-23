@@ -1,38 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, Query, QueryList, ViewChildren } from '@angular/core';
 import { Color, IPiece, PieceType } from '../models/pieces';
+import { arrayPalletInterface, ChallengeService } from '../services/challenge.service';
 import { LogicService } from '../services/logic.service';
-
-export interface arrayPalletInterface {
-  type: PieceType;
-  readonly limit: number;
-  count: number;
-}
 @Component({
   selector: 'app-challenge',
   templateUrl: './challenge.component.html',
   styleUrls: ['./challenge.component.scss']
 })
 export class ChallengeComponent implements OnInit {
+  @ViewChildren('chessboardCell') chessboardCells: QueryList<ElementRef>;
+  @ViewChildren('palletCell') palletCells: QueryList<ElementRef>;
   readonly keysOfPiecesType: (keyof typeof PieceType)[] = <(keyof typeof PieceType)[]>Object.keys(PieceType);
+  whitePiecesPallet: arrayPalletInterface[];
+  blackPiecesPallet: arrayPalletInterface[];
   chessboard: IPiece[][] = [];
   sidePiecesPallet: Array<{ type: PieceType; color: Color }> = [];
   vertical_index: number[] = [];
   horizontal_index: String[] = [];
-
-  whitePieces: arrayPalletInterface[] = [
-    { type: PieceType.King, limit: 1, count: 0 },
-    { type: PieceType.Queen, limit: 1, count: 0 },
-    { type: PieceType.Rook, limit: 2, count: 0 },
-    { type: PieceType.Knight, limit: 2, count: 0 },
-    { type: PieceType.Bishop, limit: 2, count: 0 },
-    { type: PieceType.Pawn, limit: 8, count: 0 }
-  ];
-  blackPieces: arrayPalletInterface;
-
   dataTransfer: Element;
+  private _pieceId: any;
 
-  constructor(private logicService: LogicService) {
+  constructor(private logicService: LogicService, private challengeService: ChallengeService) {
     this.chessboard = logicService.chessboard;
+    this.whitePiecesPallet = challengeService.whitePiecesPallet;
+    this.blackPiecesPallet = challengeService.blackPiecesPallet;
   }
 
   ngOnInit(): void {
@@ -56,33 +47,45 @@ export class ChallengeComponent implements OnInit {
   }
 
   onDrag($event: any) {
-    $event.effectAllowed = 'clone';
+    this._pieceId = $event.target.id.toString();
+    let val = this._pieceId.includes(Color.White)
+      ? this.whitePiecesPallet.find(({ type }) => type === this._pieceId.substring(6))
+      : this.blackPiecesPallet.find(({ type }) => type === this._pieceId.substring(6));
+
+    if (val) {
+      if (val.count < val.limit) {
+        val.count++;
+      } else {
+        $event.target.draggable = false;
+      }
+
+      if (val.count < val.limit) {
+        val.count++;
+      } else {
+        $event.target.draggable = false;
+      }
+    }
     this.dataTransfer = $event.target.cloneNode();
   }
 
   onDrop($event: any) {
+    console.log(this.whitePiecesPallet);
+
     $event.stopPropagation();
     $event.target.appendChild(this.dataTransfer);
+    $event.target.firstChild.draggable = false;
   }
 
-  // startDragging($event: any) {
-  //   console.log('start');
-  //   $event.effectAllowed = 'clone';
-  //   $event.dataTransfer.setData('text', $event.target);
-  // }
-
-  // endDragging($event: Event) {
-  //   console.log('asdsa', $event.target);
-  // }
-
-  // onDragLeave($event: Event) {
-  //   $event.stopPropagation();
-  //   $event.preventDefault();
-  // }
-
-  //  onDragEnter($event) {}
-
-  // onDrop($event: Event) {
-  //   $event.stopPropagation();
+  resetAll() {
+    this.chessboardCells.forEach((cell) => {
+      if (cell.nativeElement.firstChild) cell.nativeElement.firstChild.remove();
+    });
+    this.palletCells.forEach((cell) => {
+      cell.nativeElement.draggable = true;
+    });
+    this.challengeService.resetAll();
+  }
+  // trackByPiece(index: number, item: any): PieceType {
+  //   return item;
   // }
 }
