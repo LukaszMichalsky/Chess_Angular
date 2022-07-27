@@ -10,11 +10,12 @@ import { LoadComponent } from './save&load/load/load.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { SaveComponent } from './save&load/save/save.component';
+import { APP_BASE_HREF } from '@angular/common';
 
 @NgModule({
   declarations: [AppComponent, GameComponent, MenuComponent, ChallengeComponent, LoadComponent, SaveComponent],
   imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, MatFormFieldModule],
-  providers: [],
+  providers: [{ provide: APP_BASE_HREF, useValue: '/' }],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
