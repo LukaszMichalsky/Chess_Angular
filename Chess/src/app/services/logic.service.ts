@@ -59,8 +59,8 @@ export class LogicService implements OnInit {
 
   //CASTLING RULES
   // król nie jest szachowany DONE
-  // przed roszadą ani król, ani wieża nie wykonali żadnego ruchu
-  // pomiędzy królem, a wieżą nie stoją inne figury[3]
+  // przed roszadą ani król, ani wieża nie wykonali żadnego ruchu done
+  // pomiędzy królem, a wieżą nie stoją inne figury[3] ez done
 
   // po roszadzie nie może znaleźć się pod szachem
 
@@ -164,19 +164,23 @@ export class LogicService implements OnInit {
     else this.playerTurn = Color.White;
   }
 
-  checkIsCheck(): boolean {
-    this.searchKings();
+  checkIsCheck(row?: number, col?: number): boolean {
     let kingColumn;
     let kingRow;
-    if (this.playerTurn === Color.White) {
-      // search which turn is and set kings positions
-      kingColumn = this._whiteLKingPosition.col;
-      kingRow = this._whiteLKingPosition.row;
+    if (row && col) {
+      kingColumn = col;
+      kingRow = row;
     } else {
-      kingColumn = this._blackKingPosition.col;
-      kingRow = this._blackKingPosition.row;
+      this.searchKings();
+      if (this.playerTurn === Color.White) {
+        // search which turn is and set kings positions
+        kingColumn = this._whiteLKingPosition.col;
+        kingRow = this._whiteLKingPosition.row;
+      } else {
+        kingColumn = this._blackKingPosition.col;
+        kingRow = this._blackKingPosition.row;
+      }
     }
-
     // if (kingColumn - 1 < 0 || kingColumn + 1 > 7)
     if (this.playerTurn === Color.White) {
       if (kingColumn + 1 < 8)
@@ -378,7 +382,32 @@ export class LogicService implements OnInit {
     return row > 7 || row < 0 || col > 7 || col < 0 ? true : false;
   }
 
-  castling(king: PieceInterface): void {}
+  castlingMove(cell: PieceInterface): void {
+    //pole jest valid cellem => warunki roszady spelnione i rusza sie krol
+    if (cell.row === 0 && !this.blackKingCastling.kingMoved) {
+      //black castling
+      if (cell.column === 1) {
+        this.clearCell(0, 0);
+        this.chessboard[0][2].type = PieceType.Rook;
+        this.chessboard[0][2].color = Color.Black;
+      } else if (cell.column === 5) {
+        this.clearCell(0, 7);
+        this.chessboard[0][4].type = PieceType.Rook;
+        this.chessboard[0][4].color = Color.Black;
+      }
+    } else if (cell.row === 7 && !this.whiteKingCastling.kingMoved) {
+      //white castling
+      if (cell.column === 6) {
+        this.clearCell(7, 7);
+        this.chessboard[7][5].type = PieceType.Rook;
+        this.chessboard[7][5].color = Color.White;
+      } else if (cell.column === 2) {
+        this.clearCell(7, 0);
+        this.chessboard[7][3].type = PieceType.Rook;
+        this.chessboard[7][3].color = Color.White;
+      }
+    }
+  }
 
   rookMoved(rook: PieceInterface): void {
     if (this.playerTurn === Color.White) {
@@ -396,6 +425,11 @@ export class LogicService implements OnInit {
     this.playerTurn === Color.White
       ? (this.whiteKingCastling.kingMoved = true)
       : (this.blackKingCastling.kingMoved = true);
+  }
+
+  clearCell(row: number, col: number): void {
+    this.chessboard[row][col].type = undefined;
+    this.chessboard[row][col].color = undefined;
   }
 
   // ==============================Pieces moveset functions==========================
@@ -549,18 +583,60 @@ export class LogicService implements OnInit {
         }
       }
     }
-    if (king.color === Color.White) {
-      if (!this.whiteKingCastling.kingMoved && this.whiteKingCastling.canCastling) {
-        //left side
-
-        //right side
-        if (!this.whiteKingCastling.rightRookMoved) {
-          if (this.chessboard[7][5].type === undefined && this.chessboard[7][6].type === undefined) {
-            this.chessboard[7][6].validCell = true;
+    if (!this.checkIsCheck()) {
+      if (king.color === Color.White) {
+        if (!this.whiteKingCastling.kingMoved && this.whiteKingCastling.canCastling) {
+          //left side
+          if (!this.whiteKingCastling.leftRookMoved) {
+            if (
+              this.chessboard[7][1].type === undefined &&
+              this.chessboard[7][2].type === undefined &&
+              this.chessboard[7][3].type === undefined &&
+              !this.checkIsCheck(7, 2) &&
+              !this.checkIsCheck(7, 3)
+            ) {
+              this.chessboard[7][2].validCell = true;
+            }
+          }
+          //right side
+          if (!this.whiteKingCastling.rightRookMoved) {
+            if (
+              this.chessboard[7][5].type === undefined &&
+              this.chessboard[7][6].type === undefined &&
+              !this.checkIsCheck(7, 6) &&
+              !this.checkIsCheck(7, 5)
+            ) {
+              this.chessboard[7][6].validCell = true;
+            }
+          }
+        }
+      } else {
+        if (!this.blackKingCastling.kingMoved && this.blackKingCastling.canCastling) {
+          //right side
+          if (!this.blackKingCastling.rightRookMoved) {
+            if (
+              this.chessboard[0][4].type === undefined &&
+              this.chessboard[0][5].type === undefined &&
+              this.chessboard[0][6].type === undefined &&
+              !this.checkIsCheck(0, 5) &&
+              !this.checkIsCheck(0, 4)
+            ) {
+              this.chessboard[0][5].validCell = true;
+            }
+          }
+          //left side
+          if (!this.whiteKingCastling.leftRookMoved) {
+            if (
+              this.chessboard[0][1].type === undefined &&
+              this.chessboard[0][2].type === undefined &&
+              this.checkIsCheck(0, 1) &&
+              !this.checkIsCheck(0, 2)
+            ) {
+              this.chessboard[0][1].validCell = true;
+            }
           }
         }
       }
-    } else {
     }
   }
 

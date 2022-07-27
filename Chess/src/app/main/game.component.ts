@@ -73,7 +73,6 @@ export class GameComponent implements OnInit, OnDestroy {
       case 'King':
         {
           this.logicService.KingMoveSet(cell);
-          this.logicService.castling(cell);
         }
         break;
     }
@@ -93,30 +92,27 @@ export class GameComponent implements OnInit, OnDestroy {
         if (cell.type === PieceType.King) {
           this.gameOverFlag = true;
           alert('Game Over!');
-        } else {
-          if (this.previousClick.type === PieceType.Rook) this.logicService.rookMoved(cell);
-          if (this.previousClick.type === PieceType.King) this.logicService.kingMoved();
+        }
+        if (this.previousClick.type === PieceType.Rook) this.logicService.rookMoved(cell);
 
-          cell.color = this.previousClick.color;
-          cell.type = this.previousClick.type;
+        if (this.previousClick.type === PieceType.King) {
+          this.logicService.castlingMove(cell);
+          this.logicService.kingMoved();
+        }
 
-          this.previousClick.color = undefined;
-          this.previousClick.type = undefined;
-          //promocja piona
-          if ((cell.row == 0 && cell.type == PieceType.Pawn) || (cell.row == 7 && cell.type == PieceType.Pawn))
-            cell.type = PieceType.Queen;
+        cell.color = this.previousClick.color;
+        cell.type = this.previousClick.type;
 
-          this.logicService.clearValidMoves();
-          this.logicService.changePlayerTurn();
-          if (this.logicService.checkIsCheck()) {
-            alert('Check!');
-            if (this.logicService.playerTurn === Color.White) this.logicService.whiteKingCastling.canCastling = false;
-            else this.logicService.blackKingCastling.canCastling = false;
-          } else {
-            if (this.logicService.playerTurn === Color.White) this.logicService.whiteKingCastling.canCastling = true;
-            else this.logicService.blackKingCastling.canCastling = true;
-          }
-          //console.log(this.logicService.whiteKingCastling, this.logicService.blackKingCastling);
+        this.previousClick.color = undefined;
+        this.previousClick.type = undefined;
+        //promocja piona
+        if ((cell.row == 0 && cell.type == PieceType.Pawn) || (cell.row == 7 && cell.type == PieceType.Pawn))
+          cell.type = PieceType.Queen;
+
+        this.logicService.clearValidMoves();
+        this.logicService.changePlayerTurn();
+        if (this.logicService.checkIsCheck() && !this.gameOverFlag) {
+          alert('Check!');
         }
       }
     } else {
