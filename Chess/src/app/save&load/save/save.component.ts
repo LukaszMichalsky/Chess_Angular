@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { IPiece } from 'src/app/models/pieces';
+import { PieceInterface } from 'src/app/models/pieces';
 import { LogicService } from '../../services/logic.service';
 
 @Component({
@@ -31,7 +31,7 @@ export class SaveComponent {
   }
 
   filterData(): Array<any> {
-    const data: IPiece[][] = this.logicService.chessboard;
+    const data: PieceInterface[][] = this.logicService.chessboard;
     let dataToSave: Array<any> = [];
     dataToSave.push({ playerTurn: this.logicService.playerTurn });
 

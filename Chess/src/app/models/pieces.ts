@@ -1,4 +1,4 @@
-export interface IPiece {
+export interface PieceInterface {
   type?: PieceType;
   color?: Color;
   row: number;

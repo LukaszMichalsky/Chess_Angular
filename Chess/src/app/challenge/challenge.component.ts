@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, Query, QueryList, ViewChildren } from '@angular/core';
-import { Color, IPiece, PieceType } from '../models/pieces';
+import { Color, PieceInterface, PieceType } from '../models/pieces';
 import { arrayPalletInterface, ChallengeService } from '../services/challenge.service';
 import { LogicService } from '../services/logic.service';
 @Component({
@@ -13,7 +13,7 @@ export class ChallengeComponent implements OnInit {
   readonly keysOfPiecesType: (keyof typeof PieceType)[] = <(keyof typeof PieceType)[]>Object.keys(PieceType);
   whitePiecesPallet: arrayPalletInterface[];
   blackPiecesPallet: arrayPalletInterface[];
-  chessboard: IPiece[][] = [];
+  chessboard: PieceInterface[][] = [];
   sidePiecesPallet: Array<{ type: PieceType; color: Color }> = [];
   vertical_index: number[] = [];
   horizontal_index: String[] = [];
@@ -69,8 +69,6 @@ export class ChallengeComponent implements OnInit {
   }
 
   onDrop($event: any) {
-    console.log(this.whitePiecesPallet);
-
     $event.stopPropagation();
     $event.target.appendChild(this.dataTransfer);
     $event.target.firstChild.draggable = false;
