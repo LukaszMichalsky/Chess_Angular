@@ -9,11 +9,19 @@
       <ng-container *ngFor="let cell of row; let j = index">
         <div
           #chessboardCell
+          id="{{ i }}-{{ j }}"
           (dragover)="allowDrop($event)"
           (drop)="onDrop($event)"
           class="cell"
           [ngStyle]="{ 'background-color': (i + j) % 2 ? 'rgb(47,79,79)' : 'rgb(255,235,205)' }"
-        ></div>
+        >
+          <img
+            draggable="false"
+            class="piece"
+            *ngIf="chessboard[i][j].type"
+            src="assets/{{ chessboard[i][j].color }}-{{ chessboard[i][j].type }}.svg"
+          />
+        </div>
       </ng-container>
     </ng-container>
   </div>
