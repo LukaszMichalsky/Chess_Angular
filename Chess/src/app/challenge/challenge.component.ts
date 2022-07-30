@@ -18,6 +18,7 @@ export class ChallengeComponent implements OnInit {
   vertical_index: number[] = [];
   horizontal_index: String[] = [];
   dataTransfer: Element;
+  cellData: PieceInterface;
   private _pieceId: any;
 
   constructor(private logicService: LogicService, private challengeService: ChallengeService) {
@@ -48,9 +49,12 @@ export class ChallengeComponent implements OnInit {
 
   onDrag($event: any) {
     this._pieceId = $event.target.id.toString();
+    console.log(this._pieceId, this.cellData);
+
+    // this._pieceId.includes(Color.White) ? this.cellData.color = Color.White :this.cellData.color = Color.Black
     let val = this._pieceId.includes(Color.White)
-      ? this.whitePiecesPallet.find(({ type }) => type === this._pieceId.substring(6))
-      : this.blackPiecesPallet.find(({ type }) => type === this._pieceId.substring(6));
+      ? (this.whitePiecesPallet.find(({ type }) => type === this._pieceId.substring(6)))
+      : (this.blackPiecesPallet.find(({ type }) => type === this._pieceId.substring(6)));
 
     if (val) {
       if (val.count < val.limit) {
@@ -65,12 +69,18 @@ export class ChallengeComponent implements OnInit {
         $event.target.draggable = false;
       }
     }
+
     this.dataTransfer = $event.target.cloneNode();
+
+    this.cellData.type = val?.type;
+    this.cellData.validCell = false;
   }
 
   onDrop($event: any) {
     $event.stopPropagation();
     $event.target.appendChild(this.dataTransfer);
+    // this.de
+    // this.chessboard[][] = this.cellData
     $event.target.firstChild.draggable = false;
   }
 

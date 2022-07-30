@@ -135,10 +135,6 @@ export class LogicService implements OnInit {
     return false;
   }
 
-  setValidCell(row: number, col: number): void {
-    this.chessboard[row][col].validCell = true;
-  }
-
   setPawnValidCells(row: number, col: number, color: Color | undefined): void {
     let pawnCell = this.chessboard[row][col];
     let rightSide = this.checkIsOutOfRange(row, col + 1) ? null : this.chessboard[row][col + 1];

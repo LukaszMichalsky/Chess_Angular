@@ -48,7 +48,6 @@ export class SaveComponent {
         }
       }
     }
-
     return dataToSave;
   }
 }
