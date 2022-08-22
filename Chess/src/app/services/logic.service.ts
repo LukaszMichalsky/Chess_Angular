@@ -34,7 +34,7 @@ export class LogicService implements OnInit {
   };
 
   private _whiteLKingPosition = { row: 7, col: 4 };
-  private _blackKingPosition = { row: 0, col: 3 };
+  private _blackKingPosition = { row: 0, col: 4 };
 
   constructor() {
     this.chessboard = [];
@@ -105,10 +105,10 @@ export class LogicService implements OnInit {
     this.chessboard[7][2] = { type: PieceType.Bishop, color: Color.White, row: 7, column: 2, validCell: false };
     this.chessboard[7][5] = { type: PieceType.Bishop, color: Color.White, row: 7, column: 5, validCell: false };
     //QUEENS
-    this.chessboard[0][4] = { type: PieceType.Queen, color: Color.Black, row: 0, column: 4, validCell: false };
+    this.chessboard[0][3] = { type: PieceType.Queen, color: Color.Black, row: 0, column: 3, validCell: false };
     this.chessboard[7][3] = { type: PieceType.Queen, color: Color.White, row: 7, column: 3, validCell: false };
     //KINGS
-    this.chessboard[0][3] = { type: PieceType.King, color: Color.Black, row: 0, column: 3, validCell: false };
+    this.chessboard[0][4] = { type: PieceType.King, color: Color.Black, row: 0, column: 4, validCell: false };
     this.chessboard[7][4] = { type: PieceType.King, color: Color.White, row: 7, column: 4, validCell: false };
   }
 
@@ -382,14 +382,14 @@ export class LogicService implements OnInit {
     //pole jest valid cellem => warunki roszady spelnione i rusza sie krol
     if (cell.row === 0 && !this.blackKingCastling.kingMoved) {
       //black castling
-      if (cell.column === 1) {
+      if (cell.column === 2) {
         this.clearCell(0, 0);
-        this.chessboard[0][2].type = PieceType.Rook;
-        this.chessboard[0][2].color = Color.Black;
-      } else if (cell.column === 5) {
+        this.chessboard[0][3].type = PieceType.Rook;
+        this.chessboard[0][3].color = Color.Black;
+      } else if (cell.column === 6) {
         this.clearCell(0, 7);
-        this.chessboard[0][4].type = PieceType.Rook;
-        this.chessboard[0][4].color = Color.Black;
+        this.chessboard[0][5].type = PieceType.Rook;
+        this.chessboard[0][5].color = Color.Black;
       }
     } else if (cell.row === 7 && !this.whiteKingCastling.kingMoved) {
       //white castling
@@ -433,11 +433,21 @@ export class LogicService implements OnInit {
     let direction: number = pawn.color == Color.White ? -1 : 1; //1 for black -1 for white
     this.setPawnValidCells(pawn.row + direction, pawn.column, pawn.color);
     //black first move
-    if (pawn.row == 1 && pawn.color == Color.Black && this.chessboard[3][pawn.column].type == undefined) {
+    if (
+      pawn.row === 1 &&
+      pawn.color === Color.Black &&
+      this.chessboard[3][pawn.column].type === undefined &&
+      this.chessboard[2][pawn.column].type === undefined
+    ) {
       this.chessboard[3][pawn.column].validCell = true;
     }
     //white first move
-    if (pawn.row == 6 && pawn.color == Color.White && this.chessboard[4][pawn.column].type == undefined) {
+    if (
+      pawn.row === 6 &&
+      pawn.color === Color.White &&
+      this.chessboard[4][pawn.column].type === undefined &&
+      this.chessboard[5][pawn.column].type === undefined
+    ) {
       this.chessboard[4][pawn.column].validCell = true;
     }
   }
@@ -611,24 +621,24 @@ export class LogicService implements OnInit {
           //right side
           if (!this.blackKingCastling.rightRookMoved) {
             if (
-              this.chessboard[0][4].type === undefined &&
               this.chessboard[0][5].type === undefined &&
               this.chessboard[0][6].type === undefined &&
-              !this.checkIsCheck(0, 5) &&
-              !this.checkIsCheck(0, 4)
+              !this.checkIsCheck(0, 6) &&
+              !this.checkIsCheck(0, 5)
             ) {
-              this.chessboard[0][5].validCell = true;
+              this.chessboard[0][6].validCell = true;
             }
           }
           //left side
-          if (!this.whiteKingCastling.leftRookMoved) {
+          if (!this.blackKingCastling.leftRookMoved) {
             if (
               this.chessboard[0][1].type === undefined &&
               this.chessboard[0][2].type === undefined &&
-              this.checkIsCheck(0, 1) &&
-              !this.checkIsCheck(0, 2)
+              this.chessboard[0][3].type === undefined &&
+              !this.checkIsCheck(0, 2) &&
+              !this.checkIsCheck(0, 3)
             ) {
-              this.chessboard[0][1].validCell = true;
+              this.chessboard[0][2].validCell = true;
             }
           }
         }
