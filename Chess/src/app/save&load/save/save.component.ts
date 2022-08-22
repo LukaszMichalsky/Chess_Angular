@@ -9,17 +9,17 @@ import { LogicService } from '../../services/logic.service';
   styleUrls: ['./save.component.scss']
 })
 export class SaveComponent {
-  options = {
-    fieldSeparator: ',',
-    quoteStrings: '',
-    decimalSeparator: '.',
-    showLabels: true,
-    showTitle: false,
-    filename: 'Chess_game',
-    useTextFile: false,
-    useBom: true,
-    useKeysAsHeaders: false
-  };
+  // options = {
+  //   fieldSeparator: ',',
+  //   quoteStrings: '',
+  //   decimalSeparator: '.',
+  //   showLabels: true,
+  //   showTitle: false,
+  //   filename: 'Chess_game',
+  //   useTextFile: false,
+  //   useBom: true,
+  //   useKeysAsHeaders: false
+  // };
   fileUrl: any;
 
   constructor(private sanitizer: DomSanitizer, private readonly logicService: LogicService) {}
@@ -48,6 +48,7 @@ export class SaveComponent {
         }
       }
     }
+
     return dataToSave;
   }
 }

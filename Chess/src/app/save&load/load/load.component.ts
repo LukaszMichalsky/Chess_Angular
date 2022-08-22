@@ -22,10 +22,11 @@ export class LoadComponent implements OnInit {
       this.logicService.chessboard[piece.row][piece.column].type = piece.type;
       this.logicService.chessboard[piece.row][piece.column].color = piece.color;
     }
-    // result structure => [row, column, type, color]
   }
 
   loadGame($event: any) {
+    this.logicService.isNewGame = false;
+    this.logicService.clearChessboard();
     let file = $event.target.files[0];
     const fileReader = new FileReader();
     fileReader.readAsText(file);
@@ -36,8 +37,7 @@ export class LoadComponent implements OnInit {
       console.log(error);
     };
 
-    this.logicService.isNewGame = false;
-    this.logicService.clearChessboard();
+
 
     this.router.navigate(['/game']);
   }
