@@ -2,7 +2,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { Color, PieceInterface, PieceType } from '../models/pieces';
 
 export interface kingCastling {
-  canCastling: boolean; //can general castling = > king dont move
+  canCastling: boolean;
   leftRookMoved: boolean;
   rightRookMoved: boolean;
   kingMoved: boolean;
@@ -499,8 +499,7 @@ export class LogicService implements OnInit {
       if (i % 2 == 0) j = -1;
       else j = -2;
       for (let k = 0; k < 2; k++) {
-        if (knight.row + i >= 0 && knight.row + i < 8 && knight.column + j >= 0 && knight.column + j < 8) {
-          //is in array range
+        if (!this.checkIsOutOfRange(knight.row + i, knight.column + j)) {
           if (this.checkIsValidCell(knight.row + i, knight.column + j, knight.color))
             this.chessboard[knight.row + i][knight.column + j].validCell = true;
         }
@@ -625,7 +624,7 @@ export class LogicService implements OnInit {
             if (
               this.chessboard[0][1].type === undefined &&
               this.chessboard[0][2].type === undefined &&
-              this.checkIsCheck(0, 1) &&
+              !this.checkIsCheck(0, 1) &&
               !this.checkIsCheck(0, 2)
             ) {
               this.chessboard[0][1].validCell = true;
